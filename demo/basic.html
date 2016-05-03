@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <title>Flux Viewport</title>
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/flux-three-plugins.global.js"></script>
+    <script src="../build/flux-viewport.global.js"></script>
+</head>
+<body onkeypress="focusAll()" onload="handleLoad()">
+    <h2>Flux Viewport</h2>
+    <div id="container" style="width:400px;height:400px;display:inline-block;background-color:#FFCCCC"></div>
+
+    <script>
+    'use strict';
+
+    var torus = {"origin": [0,0,0],"majorRadius": 5,"minorRadius":3,"axis":[0,0,1],"primitive":"torus"};
+    var fluxViewport = null;
+    var fluxScene = null;
+
+    function handleLoad() {
+        fluxViewport = new FluxViewport(container);
+        fluxScene = fluxViewport.renderer.scene;
+        createLight(fluxScene);
+        fluxViewport.setGeometryEntity(torus);
+    }
+
+    // creates a directional light, adds to scene
+    function createLight(scene) {
+        var l = new THREE.DirectionalLight();
+        l.position.set(6, 8, 5);
+        scene.add(l);
+        return l;
+    }
+
+    function focusAll() {
+        var vps = document.getElementsByTagName('three-viewport');
+        for (var i=0;i<vps.length;i++) {
+            var vp = vps[i];
+            vp.focus();
+        }
+    }
+    </script>
+</body>
+</html>

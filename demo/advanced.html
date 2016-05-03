@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+<head>
+    <title>Flux Multiple Viewports</title>
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/flux-three-plugins.global.js"></script>
+    <script src="../build/flux-viewport.global.js"></script>
+</head>
+<body onkeypress="focusAll()">
+    <select id="viewMenu" onchange="setView()">
+      <option value="persp">persp</option>
+      <option value="left">left</option>
+      <option value="right">right</option>
+      <option value="front">front</option>
+      <option value="back">back</option>
+      <option value="top">top</option>
+      <option value="bottom">bottom</option>
+    </select>
+    <button onclick="focusAll()">Focus All</button>
+    <br>
+    <div id="first" style="width:400px;height:400px;display:inline-block;"></div>
+    <div id="second" style="width:300px;height:300px;display:inline-block;"></div>
+    <br>
+    <div id="third" style="width:400px;height:500px;display:inline-block;"></div>
+    <div id="fourth" style="width:400px;height:500px;display:inline-block;"></div>
+  <script>
+        var viewports = [];
+        // materials for testing
+        var lambert = new THREE.MeshLambertMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+        var basic = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+
+        var first = document.querySelector("#first");
+        viewports.push(new FluxViewport(first));
+        viewports[0].renderer.helpersObj.setShowAxis(false);
+        createFocusTestScene(viewports[0]);
+
+        var second = document.querySelector("#second");
+        viewports[1] = new FluxViewport(second);
+        viewports[1].renderer.setView("top");
+        viewports[1].render();
+
+        var third = document.querySelector("#third");
+        viewports[2] = new FluxViewport(third);
+        createShadowTestScene(viewports[2]);
+
+        var fourth = document.querySelector("#fourth");
+        viewports[3] = new FluxViewport(fourth);
+        createFogTestScene(viewports[3]);
+
+        // creates a directional light, adds to scene
+        function createLight(scene) {
+          var l = new THREE.DirectionalLight();
+          l.position.set(6, 5, 8);
+          scene.add(l);
+          return l;
+        }
+
+        function setView() {
+          viewports[0].renderer.setView(viewMenu.value);
+          viewports[0].render();
+        }
+
+        // creates a ground plane, adds to scene
+        function createGround(scene, size) {
+          var plane = new THREE.PlaneGeometry( size, size );
+          ground = new THREE.Mesh( plane, lambert );
+          scene.add(ground);
+          return ground;
+        }
+
+        // creates geometry primitives
+        function createGeometry(scene, shape) {
+          var geom = new THREE.BoxGeometry(1, 1, 1);
+          switch(shape) {
+            case 'sphere':
+              geom = new THREE.SphereBufferGeometry( 5, 16, 16 );
+              break;
+            case 'knot':
+              geom = new THREE.TorusKnotGeometry( 1.5, 0.5, 80, 12 );
+              break;
+            case 'quad':
+              geom = new THREE.PlaneGeometry( 5, 5 );
+              break;
+            case 'cube':
+              geom = new THREE.BoxGeometry(1, 1, 1);
+          }
+          var mesh = new THREE.Mesh( geom, lambert );
+          scene.add(mesh);
+          return mesh;
+        }
+
+        // creates and scatters cubes
+        function createCubes(scene, range, num, size) {
+          for (var i=0; i<num; i++) {
+            var c = createGeometry(scene, 'cube');
+            c.position.set(Math.random()*range-range/2, Math.random()*range-range/2, size/2);
+            c.scale.set(size,size,size);
+          }
+        }
+
+        function createFocusTestScene(viewport) {
+          createLight(viewport.renderer.scene);
+          var sphere = createGeometry(viewport.renderer.scene, 'sphere');
+          sphere.position.x += 10;
+          viewport.focus();
+          viewport.render();
+        }
+
+        // creates a scene to test stencilbuffer shadows
+        function createShadowTestScene(viewport) {
+
+          viewport.renderer.multipass = true;
+          viewport.renderer.showOcclusion = true;
+          viewport.renderer.showShadows = true;
+
+          createGround(viewport.renderer.scene, 20);
+
+          var l = createLight(viewport.renderer.scene);
+          l.position.set(-6, -5, 8);
+          viewport.renderer.setShadowLight(l);
+
+          var quad = createGeometry(viewport.renderer.scene, 'quad');
+          quad.position.y = -1.5;
+          quad.position.x = -1.5;
+          quad.rotation.y = 1.5;
+          viewport.renderer.addShadow(quad);
+
+          var knot = createGeometry(viewport.renderer.scene, 'knot');
+          knot.position.set(-2, 0, 1.5);
+          knot.rotation.x = Math.PI/2;
+          viewport.renderer.addShadow(knot);
+          viewport.focus();
+          viewport.render();
+        }
+
+        // creates a scene to test fog
+        function createFogTestScene(viewport) {
+          viewport.renderer.camera.position.set(100,20,100);
+          viewport.renderer.camera.lookAt(new THREE.Vector3(-220,0,-220));
+          viewport.renderer.showAxis = false;
+          viewport.renderer.showCompass = false;
+
+          viewport.renderer.fogDensity = 0.0075;
+
+          createGround(viewport.renderer.scene, 200);
+          createCubes(viewport.renderer.scene, 200, 20, 10);
+
+          var l = createLight(viewport.renderer.scene);
+          viewport.focus();
+          viewport.render();
+        }
+
+        function focusAll() {
+          for (var i=0;i<viewports.length;i++) {
+            var vp = viewports[i];
+            vp.focus();
+          }
+        }
+  </script>
+
+</body>
+</html>

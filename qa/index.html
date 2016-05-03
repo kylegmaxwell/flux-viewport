@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+    <title>QA Diff Tool</title>
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/flux-three-plugins.global.js"></script>
+    <script src="../build/flux-viewport.global.js"></script>
+    <script src="./diff.js"></script>
+    <script src="../node_modules/resemblejs/resemble.js"></script>
+    <style type="text/css">
+    #container {
+        width:400px;
+        height:400px;
+        display:inline-block;
+        background-color:#000;
+    }
+    #diffCanvas {
+        background-color:#FF00FF;
+        width:400px;
+        height:400px;
+        display:inline-block;
+    }
+    .right {
+        position: absolute;
+        left:800px;
+    }
+    .middle {
+        left:400px;
+        position: absolute;
+    }
+    </style>
+</head>
+    <body onkeypress="focusAll()" onload="handleLoad()">
+    <h2>QA Diff Tool</h2>
+
+    <br>
+    Upload diff image: <input type="file" id="imageSelector" accept="image/*" onchange="diffImageChanged()">
+    <span class="middle">
+        Upload json geom: <input type="file" id="jsonSelector" accept="text/json" onchange="jsonGeomChanged()">
+    </span>
+    <button type="button" class="right" onclick="diffImages()">Compute the Difference!</button>
+
+    <br>
+    <div id="container" style=""></div>
+    <canvas id="diffCanvas" class="right"></canvas>
+    <br>
+
+    <span class="middle">
+    <input type="text" id="downloadInput" value="image.png">
+    <a id="downloadLink" href="">Download Render as Image</a>
+    </span>
+
+    <span id="diffContainer" class="right">
+        Difference: <span id="diffResults">_</span>%
+    </span>
+
+    <script>
+    'use strict';
+
+    var fluxViewport = null;
+    var fluxScene = null;
+
+    function handleLoad() {
+        fluxViewport = new FluxViewport(container);
+        fluxScene = fluxViewport.renderer.scene;
+        createLight(fluxScene);
+
+        fluxViewport.renderer._context.renderer.domElement.style.left='400px';
+
+        downloadLink.addEventListener('click', function() {
+            handleDownloadClick();
+        }, false);
+    }
+
+    // creates a directional light, adds to scene
+    function createLight(scene) {
+        var l = new THREE.DirectionalLight();
+        l.position.set(6, 8, 5);
+        scene.add(l);
+        return l;
+    }
+
+    function focusAll() {
+        var vps = document.getElementsByTagName('three-viewport');
+        for (var i=0;i<vps.length;i++) {
+            var vp = vps[i];
+            vp.focus();
+        }
+    }
+    </script>
+</body>
+</html>

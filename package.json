@@ -1,0 +1,45 @@
+{
+  "name": "flux-viewport",
+  "version": "1.0.0",
+  "description": "three.js Viewport for Flux",
+  "main": "index.js",
+  "dependencies": {
+    "accessibility-developer-tools": "^2.7.0",
+    "async": "^1.4.0",
+    "chai": "^3.2.0",
+    "flux-json-to-three": "git+ssh://git@bitbucket.org/vannevartech/flux-json-to-three.git#796bba01dd8be97864dd3aa62213e7f81b4c7555",
+    "flux-three-plugins": "git+ssh://git@bitbucket.org/vannevartech/flux-three-plugins.git#24c0bbe02297a6f15388794adc28bdae77bb6d76",
+    "lodash": "^3.10.1",
+    "polymer": "^0.4.1",
+    "polyserve": "^0.4.0",
+    "sinon": "^1.15.4",
+    "sinon-chai": "^2.8.0",
+    "stacky": "^1.2.2",
+    "uglifyjs": "^2.4.10",
+    "web-component-tester": "^3.3.10"
+  },
+  "devDependencies": {
+    "ajv": "^4.0.3",
+    "mocha": "^2.2.5",
+    "resemblejs": "^2.2.0",
+    "rollup": "^0.25.8",
+    "rollup-plugin-commonjs": "^2.2.1",
+    "rollup-plugin-json": "^2.0.0",
+    "rollup-plugin-node-resolve": "^1.5.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "copy-lib": "cp node_modules/flux-three-plugins/build/index.global.js lib/flux-three-plugins.global.js; cp node_modules/flux-json-to-three/build/index.common.js lib/flux-json-to-three.common.js",
+    "clean": "rm -rf build",
+    "init": "mkdir build",
+    "build-globals": "rollup -c rollup.config.js -f=iife -n=FluxViewport > ./build/flux-viewport.global.js",
+    "build": "npm run clean; npm run init; npm run build-globals"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/kylegmaxwell/three-js-live.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/kylegmaxwell/three-js-live#readme"
+}
