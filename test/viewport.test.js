@@ -1,52 +1,81 @@
-<!doctype html>
-<html>
-<head>
-  <script src="../webcomponentsjs/webcomponents.js"></script>
-  <script src="../web-component-tester/browser.js"></script>
-  <link rel="import" href="three-viewport.html">
-</head>
-<body>
-  <script>
+'use strict';
 
-    // DOM element used to test three-viewport
-    var elt;
+import FluxViewport from '../src/FluxViewport.js';
+import viewportState from './viewportState.json'
+// This is a stub
+var domElement = document.createElement();
 
-    // Test suite
-    describe('three-viewport', function() {
+export function focusViewport(t) {
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10};
+    var viewport = new FluxViewport(domElement, {width:100,height:100});
+    viewport.setGeometryEntity(sphere).then(function () {
+        t.ok(viewport._renderer._model, 'Viewport should create a model');
+        t.end();
+    }, function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}; // end it
 
-      // Add the element to be tested
-      beforeEach(function() {
-        elt = document.createElement('three-viewport');
-        elt.setAttribute('id', 'test');
-      });
+export function replaceGeom(t) {
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10};
+    var sphere2 = {"origin":[0,0,0],"primitive":"sphere","radius":2};
+    var viewport = new FluxViewport(domElement, {width:100,height:100});
+    viewport.setGeometryEntity(sphere).then(function () {
+        t.ok(viewport._renderer._model, 'Viewport should create a model');
+        viewport.setGeometryEntity(sphere).then(function () {
+            t.ok(viewport._renderer._model, 'Viewport should create a model');
+            t.end();
+        }, function (errors) {
+            t.fail('Caught an error: '+ errors);
+            t.end();
+        });
+    }, function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}; // end it
 
-      it('should already exist in dom and be created per test', function (done) {
-        // Check for element created for this test
-        expect(elt).to.exist;
-        expect(elt.getAttribute('id')).to.equal('test');
-        done();
-      }); // end it
+export function viewportToJson(t) {
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10};
+    var viewport = new FluxViewport(domElement, {width:100,height:100});
+    viewport.setGeometryEntity(sphere).then(function () {
+        var viewportString = JSON.stringify(viewport.toJSON());
+        var keywords = ['entities', 'view', 'cameras'];
+        for (var i=0;i<keywords.length;i++) {
+            t.ok(viewportString.toLocaleLowerCase().indexOf(keywords[i])!==-1, 'JSON should contain '+keywords[i]);
+        }
+        t.end();
+    }, function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}; // end it
 
-    it('should render and save after focus', function (done) {
-        elt.renderLater = sinon.spy(elt.renderLater);
-        elt.serializeCameraStates = sinon.spy(elt.serializeCameraStates);
+export function viewportFromJson(t) {
+    var viewport = new FluxViewport(domElement, {width:100,height:100});
+    viewport.fromJSON(viewportState).then( function() {
+        t.equal(viewport._entities.primitive, 'torus', 'Should get a torus from JSON');
+        t.end();
+    }, function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}; // end it
 
-        expect(elt.renderLater.callCount).to.equal(0);
-        expect(elt.serializeCameraStates.callCount).to.equal(0);
-
-        var obj = new THREE.Object3D;
-        obj.geometry = new THREE.SphereBufferGeometry(1.0, 42, 42);
-        elt.focusObject(obj);
-
-        expect(elt.renderLater.callCount).to.equal(2);
-        expect(elt.serializeCameraStates.callCount).to.equal(1);
-
-        done();
-      }); // end it
-
-    }); // end describe
-
-  </script>
-
-</body>
-</html>
+export function initControls(t) {
+    var updated = false;
+    var viewport = new FluxViewport(domElement);
+    viewport.addEventListener(FluxViewport.getChangeEvent(), function() {
+        updated = true;
+    });
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10};
+    viewport.setGeometryEntity(sphere).then(function () {
+        viewport.focus();
+        t.ok(updated, 'Update should fire.');
+        t.end();
+    }, function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+};

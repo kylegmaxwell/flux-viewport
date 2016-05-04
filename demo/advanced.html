@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <meta charset="utf-8">
     <title>Flux Multiple Viewports</title>
     <script src="../lib/three.min.js"></script>
     <script src="../lib/flux-three-plugins.global.js"></script>
@@ -8,13 +9,13 @@
 </head>
 <body onkeypress="focusAll()">
     <select id="viewMenu" onchange="setView()">
-      <option value="persp">persp</option>
-      <option value="left">left</option>
-      <option value="right">right</option>
-      <option value="front">front</option>
-      <option value="back">back</option>
+      <option value="perspective">perspective</option>
       <option value="top">top</option>
       <option value="bottom">bottom</option>
+      <option value="front">front</option>
+      <option value="back">back</option>
+      <option value="right">right</option>
+      <option value="left">left</option>
     </select>
     <button onclick="focusAll()">Focus All</button>
     <br>
@@ -31,12 +32,11 @@
 
         var first = document.querySelector("#first");
         viewports.push(new FluxViewport(first));
-        viewports[0].renderer.helpersObj.setShowAxis(false);
         createFocusTestScene(viewports[0]);
 
         var second = document.querySelector("#second");
         viewports[1] = new FluxViewport(second);
-        viewports[1].renderer.setView("top");
+        viewports[1].setView(FluxViewport.getViews().top);
         viewports[1].render();
 
         var third = document.querySelector("#third");
@@ -47,17 +47,10 @@
         viewports[3] = new FluxViewport(fourth);
         createFogTestScene(viewports[3]);
 
-        // creates a directional light, adds to scene
-        function createLight(scene) {
-          var l = new THREE.DirectionalLight();
-          l.position.set(6, 5, 8);
-          scene.add(l);
-          return l;
-        }
-
         function setView() {
-          viewports[0].renderer.setView(viewMenu.value);
-          viewports[0].render();
+          viewports[0].setView(viewMenu.value);
+          var view = FluxViewport.getViews()[viewMenu.value];
+          viewports[0].setView(view);
         }
 
         // creates a ground plane, adds to scene
@@ -68,92 +61,56 @@
           return ground;
         }
 
-        // creates geometry primitives
-        function createGeometry(scene, shape) {
-          var geom = new THREE.BoxGeometry(1, 1, 1);
-          switch(shape) {
-            case 'sphere':
-              geom = new THREE.SphereBufferGeometry( 5, 16, 16 );
-              break;
-            case 'knot':
-              geom = new THREE.TorusKnotGeometry( 1.5, 0.5, 80, 12 );
-              break;
-            case 'quad':
-              geom = new THREE.PlaneGeometry( 5, 5 );
-              break;
-            case 'cube':
-              geom = new THREE.BoxGeometry(1, 1, 1);
-          }
-          var mesh = new THREE.Mesh( geom, lambert );
-          scene.add(mesh);
-          return mesh;
-        }
-
-        // creates and scatters cubes
-        function createCubes(scene, range, num, size) {
-          for (var i=0; i<num; i++) {
-            var c = createGeometry(scene, 'cube');
-            c.position.set(Math.random()*range-range/2, Math.random()*range-range/2, size/2);
-            c.scale.set(size,size,size);
-          }
-        }
-
         function createFocusTestScene(viewport) {
-          createLight(viewport.renderer.scene);
-          var sphere = createGeometry(viewport.renderer.scene, 'sphere');
-          sphere.position.x += 10;
-          viewport.focus();
-          viewport.render();
+          viewport.setupDefaultLighting();
+          viewport.setEdgesMode(FluxViewport.getEdgesModes().FRONT);
+          viewport.setGeometryEntity({"origin":[5,0,0],"primitive":"sphere","radius":1});
         }
 
         // creates a scene to test stencilbuffer shadows
         function createShadowTestScene(viewport) {
-
-          viewport.renderer.multipass = true;
-          viewport.renderer.showOcclusion = true;
-          viewport.renderer.showShadows = true;
-
-          createGround(viewport.renderer.scene, 20);
-
-          var l = createLight(viewport.renderer.scene);
-          l.position.set(-6, -5, 8);
-          viewport.renderer.setShadowLight(l);
-
-          var quad = createGeometry(viewport.renderer.scene, 'quad');
-          quad.position.y = -1.5;
-          quad.position.x = -1.5;
-          quad.rotation.y = 1.5;
-          viewport.renderer.addShadow(quad);
-
-          var knot = createGeometry(viewport.renderer.scene, 'knot');
-          knot.position.set(-2, 0, 1.5);
-          knot.rotation.x = Math.PI/2;
-          viewport.renderer.addShadow(knot);
-          viewport.focus();
-          viewport.render();
+          viewport.setupDefaultLighting();
+          viewport.setGeometryEntity([
+              {"origin": [4,6,4],"majorRadius": 4,"minorRadius":1,"axis":[0,0,1],"primitive":"torus"},
+              {"origin": [-4,4,4],"majorRadius": 4,"minorRadius":1,"axis":[0,0,1],"primitive":"torus"},
+              {"origin": [0,0,2],"majorRadius": 4,"minorRadius":1,"axis":[0,0,1],"primitive":"torus"},
+              {"vertices": [[-20,0,0],[0,20,0],[20,0,0],[0,-20,0]],"faces":[[0,3,1],[1,3,2]],"primitive":"mesh"}])
+          .then(function () {
+            viewport.activateShadows();
+            viewport.focus(); // updates controls and causes a render
+            viewport.render(); // Render again due to some bug in shadows
+          });
         }
 
         // creates a scene to test fog
         function createFogTestScene(viewport) {
-          viewport.renderer.camera.position.set(100,20,100);
-          viewport.renderer.camera.lookAt(new THREE.Vector3(-220,0,-220));
-          viewport.renderer.showAxis = false;
-          viewport.renderer.showCompass = false;
 
-          viewport.renderer.fogDensity = 0.0075;
+          viewport.setFogDensity(0.005);
 
-          createGround(viewport.renderer.scene, 200);
-          createCubes(viewport.renderer.scene, 200, 20, 10);
+          viewport.setGeometryEntity([
+              {"origin":[-10,0,0],"dimensions":[1,2,3],"axis":[0,0,1],"reference":[0,1,0],"primitive":"block"},
+              {"origin":[0,-12,0],"dimensions":[1,2,3],"axis":[0,0,1],"reference":[0,1,0],"primitive":"block"},
+              {"origin":[1,0,0],"dimensions":[1,2,3],"axis":[0,0,1],"reference":[0,1,0],"primitive":"block"},
+              {"origin":[1,4,0],"dimensions":[1,2,3],"axis":[0,0,1],"reference":[0,1,0],"primitive":"block"},
+              {"origin":[4,4,0],"dimensions":[1,2,3],"axis":[0,0,1],"reference":[0,1,0],"primitive":"block"},
+              {"vertices": [[-50,0,0],[0,50,0],[50,0,0],[0,-50,0]],"faces":[[0,3,1],[1,3,2]],"primitive":"mesh"}])
+          .then(function () {
+            viewport.focus(); // updates controls and causes a render
+          });
 
-          var l = createLight(viewport.renderer.scene);
-          viewport.focus();
-          viewport.render();
+          // createGround(viewport.getScene(), 200);
+          // createCubes(viewport.getScene(), 200, 20, 10);
+
+          viewport.setupDefaultLighting();
+          viewport.focus(); // updates controls and causes a render
         }
 
         function focusAll() {
           for (var i=0;i<viewports.length;i++) {
             var vp = viewports[i];
-            vp.focus();
+            if (vp) {
+              vp.focus();
+            }
           }
         }
   </script>

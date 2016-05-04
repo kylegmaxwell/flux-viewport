@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+    <!--
+    This is a page for displaying a viewport and evaluating performance.
+    Note: This page is only intended for development and testing purposes.
+    Once the page loads try loading a model from the drop down.
+    Then click TRIAL, to run a performance test, the results will be output to the console.
+    https://docs.google.com/spreadsheets/d/1D2Rb8rPK3O8zHzZc_O1NqXIA8aB4E-V9k8hJOUvPI3k/edit#gid=0
+    -->
+    <meta charset="utf-8">
+    <title>Flux Viewport Performance</title>
+    <script src="../lib/three.min.js"></script>
+    <script src="../lib/flux-three-plugins.global.js"></script>
+    <script src="../build/flux-viewport.global.js"></script>
+
+    <script src="./InteractivePerf.js"></script>
+    <script src="./FluxBuildings.js"></script>
+    <style type="text/css">
+    #container {
+        width:400px;
+        height:400px;
+        display:inline-block;
+        background-color:#FFCCCC;
+    }
+    #viewports {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    div.viewport {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        background-color: red;
+    }
+    </style>
+</head>
+<body onkeypress="focusAll()" onload="handleLoad()">
+    <h2>Flux Viewport Performance</h2>
+    <select id="modelMenu"></select><br>
+    <button id="loadButton">Load Model</button>
+    <button id="recordButton">Record</button>
+    <button id="trialButton">Trial</button><br>
+    <button id="addViewportsButton">Add 10 Viewports</button><br>
+    <div id="viewports">
+        <div id="container"></div>
+    </div>
+    <script>
+    'use strict';
+
+    var torus = {"origin": [0,0,0],"majorRadius": 5,"minorRadius":3,"axis":[0,0,1],"primitive":"torus"};
+    var fluxViewport = null;
+    var fluxBuildings = null;
+    function handleLoad() {
+        fluxBuildings = new FluxBuildings();
+        fluxViewport = new FluxViewport(container);
+        fluxViewport.setupDefaultLighting();
+        fluxViewport.homeCamera();
+        populateList();
+        addListeners();
+    }
+
+    function populateList() {
+        var modelMenu = document.querySelector('#modelMenu');
+        var urls = FluxBuildings.urls;
+        for (var i=0;i<urls.length;i++) {
+            var option = document.createElement('option');
+            option.value = urls[i];
+            option.textContent = urls[i];
+            modelMenu.appendChild(option);
+        }
+        modelMenu.addEventListener('change', function (event) {
+            fluxBuildings.loadModel(event.target.value);
+        });
+    }
+
+    function addListeners() {
+        var modelMenu = document.querySelector('#modelMenu');
+
+        var loadButton = document.querySelector('#loadButton');
+        loadButton.addEventListener('click', function () {
+            fluxBuildings.loadModel(modelMenu.value);
+        });
+
+        var trialButton = document.querySelector('#trialButton');
+        trialButton.addEventListener('click', function () {
+            fluxBuildings.handleTrial();
+        });
+
+        var recordButton = document.querySelector('#recordButton');
+        recordButton.addEventListener('click', function () {
+            fluxBuildings.handleRecord();
+        });
+
+        var addViewportsButton = document.querySelector('#addViewportsButton');
+        addViewportsButton.addEventListener('click', function () {
+            addViewports();
+        });
+    }
+
+    function addViewports() {
+        var viewportsDiv = document.querySelector('#viewports');
+        var viewports = [];
+        var numViewports = 10;
+        for (var i=0;i<numViewports;i++) {
+            var div = document.createElement('div');
+            viewportsDiv.appendChild(div);
+            div.classList.add("viewport");
+            viewports[i] = new FluxViewport(div);
+            viewports[i].setupDefaultLighting();
+            viewports[i].homeCamera();
+            // Sync the cameras of this viewport to the main one
+            viewports[i]._renderer._cameras = fluxViewport._renderer._cameras;
+            viewports[i]._renderer._controls = fluxViewport._renderer._controls;
+        }
+        fluxViewport.addEventListener('change', function () {
+            for (var i=0;i<numViewports;i++) {
+                viewports[i].render();
+            }
+        });
+    }
+
+    function focusAll() {
+        fluxViewport.focus();
+    }
+
+    </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <meta charset="utf-8">
     <title>QA Diff Tool</title>
     <script src="../lib/three.min.js"></script>
     <script src="../lib/flux-three-plugins.global.js"></script>
@@ -14,11 +15,23 @@
         display:inline-block;
         background-color:#000;
     }
+    #imageCanvas {
+        background-color:#00004F;
+        width:400px;
+        height:400px;
+        display:inline-block;
+        user-select:none;
+        -webkit-user-select:none;
+        position: absolute;
+        left:0px;
+    }
     #diffCanvas {
         background-color:#FF00FF;
         width:400px;
         height:400px;
         display:inline-block;
+        user-select:none;
+        -webkit-user-select:none;
     }
     .right {
         position: absolute;
@@ -28,64 +41,98 @@
         left:400px;
         position: absolute;
     }
+    .mid-bottom {
+        top:520px;
+        left:400px;
+        position: absolute;
+    }
+    .right-bottom {
+        top:520px;
+        left:800px;
+        position: absolute;
+    }
     </style>
 </head>
-    <body onkeypress="focusAll()" onload="handleLoad()">
+    <body onload="handleLoad()">
     <h2>QA Diff Tool</h2>
 
     <br>
-    Upload diff image: <input type="file" id="imageSelector" accept="image/*" onchange="diffImageChanged()">
+    Upload diff image: <input type="file" id="imageSelector" accept="image/*">
     <span class="middle">
-        Upload json geom: <input type="file" id="jsonSelector" accept="text/json" onchange="jsonGeomChanged()">
+        Upload json geom: <input type="file" id="jsonSelector" accept="text/json">
     </span>
-    <button type="button" class="right" onclick="diffImages()">Compute the Difference!</button>
+    <button type="button" id="diffButton" class="right">Compute the Difference!</button>
 
     <br>
-    <div id="container" style=""></div>
-    <canvas id="diffCanvas" class="right"></canvas>
+    <canvas id="imageCanvas"></canvas>
+    <div id="container" class="middle"></div>
+        <canvas id="diffCanvas" class="right"></canvas>
     <br>
 
-    <span class="middle">
-    <input type="text" id="downloadInput" value="image.png">
-    <a id="downloadLink" href="">Download Render as Image</a>
+    <span class="mid-bottom">
+        <select id="viewMenu">
+            <option value="perspective">perspective</option>
+            <option value="top">top</option>
+            <option value="bottom">bottom</option>
+            <option value="front">front</option>
+            <option value="back">back</option>
+            <option value="right">right</option>
+            <option value="left">left</option>
+        </select><br><br>
+        Prefix
+        <input type="text" id="downloadInput" value="data">
+        <button type="button" id="downloadButton">Download Viewport State</button>
     </span>
 
-    <span id="diffContainer" class="right">
+    <span id="diffContainer" class="right-bottom">
         Difference: <span id="diffResults">_</span>%
     </span>
 
     <script>
     'use strict';
-
-    var fluxViewport = null;
-    var fluxScene = null;
-
     function handleLoad() {
-        fluxViewport = new FluxViewport(container);
-        fluxScene = fluxViewport.renderer.scene;
-        createLight(fluxScene);
+        var container = document.querySelector('#container');
+        var downloadInput = document.querySelector('#downloadInput');
+        var imageCanvas = document.querySelector('#imageCanvas');
+        var diffCanvas = document.querySelector('#diffCanvas');
+        var imageSelector = document.querySelector('#imageSelector');
+        var jsonSelector = document.querySelector('#jsonSelector');
+        var viewMenu = document.querySelector('#viewMenu');
+        // Update the render canvas to match element size
+        imageCanvas.width = imageCanvas.clientWidth;
+        imageCanvas.height = imageCanvas.clientHeight;
 
-        fluxViewport.renderer._context.renderer.domElement.style.left='400px';
+        // Update the render canvas to match element size
+        diffCanvas.width = diffCanvas.clientWidth;
+        diffCanvas.height = diffCanvas.clientHeight;
 
-        downloadLink.addEventListener('click', function() {
-            handleDownloadClick();
-        }, false);
-    }
+        var diff = new DiffUtils(container, downloadInput, imageCanvas, diffCanvas, imageSelector, jsonSelector, viewMenu);
 
-    // creates a directional light, adds to scene
-    function createLight(scene) {
-        var l = new THREE.DirectionalLight();
-        l.position.set(6, 8, 5);
-        scene.add(l);
-        return l;
-    }
+        document.querySelector('#imageSelector').addEventListener('change', function(){
+            diff.diffImageChanged();
+        });
 
-    function focusAll() {
-        var vps = document.getElementsByTagName('three-viewport');
-        for (var i=0;i<vps.length;i++) {
-            var vp = vps[i];
-            vp.focus();
-        }
+        document.querySelector('#jsonSelector').addEventListener('change', function(){
+            diff.jsonGeomChanged();
+        });
+
+        document.querySelector('#viewMenu').addEventListener('change', function(){
+            diff.setView();
+        });
+
+        document.querySelector('#diffButton').addEventListener('click', function(){
+            diff.diffImages();
+        });
+
+        document.querySelector('#downloadButton').addEventListener('click', function(){
+            diff.downloadState();
+        });
+
+        document.body.addEventListener('keypress', function(){
+            diff.focus();
+        });
+
+
     }
     </script>
 </body>

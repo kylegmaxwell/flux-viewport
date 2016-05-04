@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "origin": [
+      0,
+      0,
+      0
+    ],
+    "majorRadius": 5,
+    "minorRadius": 3,
+    "axis": [
+      0,
+      0,
+      1
+    ],
+    "primitive": "torus"
+  },
+  "cameras": {
+    "perspective": {
+      "px": 24.96369025229516,
+      "py": 9.985476100918063,
+      "pz": 12.981118931193482,
+      "rx": -0.6556956361792811,
+      "ry": 0.990180631834331,
+      "rz": 2.314549117053033,
+      "near": 0.008000000026666664,
+      "far": 8000.000026666664,
+      "type": "perspective"
+    },
+    "orthographic": {
+      "px": 0,
+      "py": 0,
+      "pz": 0,
+      "rx": 0,
+      "ry": 0,
+      "rz": 0,
+      "near": -1000,
+      "far": 1000,
+      "top": 100,
+      "right": 100,
+      "bottom": -100,
+      "left": -100,
+      "type": "orthographic"
+    }
+  }
+}

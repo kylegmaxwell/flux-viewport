@@ -1,147 +1,206 @@
 'use strict';
 
-export default function FluxCameras() {
+export default function FluxCameras(width, height) {
     // Initialize default cameras and frustums.
-    this.cameras = {
-        'persp':  new THREE.PerspectiveCamera(30, 1, 0.1, 100000),
-        'top':    new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000),
-        'right':  new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000),
-        'bottom': new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000),
-        'left':   new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000),
-        'front':  new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000),
-        'back':   new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000)
-    };
-    for (var cam in this.cameras) {
-        this.cameras[cam]._target = new THREE.Vector3();
-    }
+    this._perspCamera = new THREE.PerspectiveCamera(30, width/height, 0.1, 100000);
     // Flux is Z up
-    this.cameras.persp.up = new THREE.Vector3( 0, 0, 1 );
-    // The camera starts far away from the origin, with the assumption
-    // that the viewport will focus the camera on the rendered
-    // geometry as soon as it becomes available.
-    this.cameras.persp.position.set(2500000, 1000000, 1300000);
-    this.cameras.persp.lookAt(this.cameras.persp._target);
-    this.cameras.persp.name = "persp";
+    this._perspCamera.up = new THREE.Vector3( 0, 0, 1 );
 
-    this.cameras.front.rotation.set(Math.PI/2, Math.PI, 0);
-    this.cameras.front.name = "front";
+    this._orthoCamera = new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000);
 
-    this.cameras.back.rotation.set(Math.PI/2, 0, 0);
-    this.cameras.back.name = "back";
+    this.setView(FluxCameras.VIEWS.perspective);
+    this.updateCamera(width, height);
+}
 
-    this.cameras.left.rotation.set(Math.PI/2, Math.PI/2, 0);
-    this.cameras.left.name = "left";
+/**
+ * Enumeration of all possible views for the camera
+ * @type {Object}
+ */
+FluxCameras.VIEWS = {
+    perspective:  0,
+    top:    1,
+    bottom: 2,
+    front:  3,
+    back:   4,
+    right:  5,
+    left:   6,
+    END:   7
+};
 
-    this.cameras.right.rotation.set(Math.PI/2, -Math.PI/2, 0);
-    this.cameras.right.name = "right";
+/**
+ * Get the current camera object
+ * @return {THREE.Camera} The current camera
+ */
+FluxCameras.prototype.getCamera = function () {
+    if (this._view === FluxCameras.VIEWS.perspective) {
+        return this._perspCamera;
+    }
+    return this._orthoCamera;
+};
 
-    this.cameras.top.rotation.set(0, Math.PI, 0);
-    this.cameras.top.name = "top";
-    this.cameras.top.position.set(0, 0, -100);
+FluxCameras.DEFAULT_POSITIONS = [
+    [2500000, 1000000, 1300000], // perspective
+    [0, 0, -100], // top
+    [0, 0, 100], // bottom
+    [0, 0, 0], // front
+    [0, 0, 0], // back
+    [0, 0, 0], // right
+    [0, 0, 0] // left
+];
 
-    this.cameras.bottom.position.set(0, 0, -100);
-    this.cameras.bottom.name = "bottom";
+FluxCameras.DEFAULT_ROTATIONS = [
+    [0, 0, 0], // perspective
+    [0, 0, 0], // top
+    [0, Math.PI, 0], // bottom
+    [Math.PI/2, Math.PI/2, 0], // front
+    [Math.PI/2, -Math.PI/2, 0], // back
+    [Math.PI/2, 0, 0], // right
+    [Math.PI/2, Math.PI, 0] // left
+];
 
-    if (!this.camera) {
-        this.camera = this.cameras.persp;
+FluxCameras.isValidView = function (view) {
+    return view != null && view.constructor === Number && view > -1 && view < FluxCameras.VIEWS.END;
+};
+
+/**
+ * Set the camera to the default coordinates for the given view.
+ * @param {FluxCameras.VIEWS} view The new view
+ */
+FluxCameras.prototype.setView = function (view) {
+    if (!FluxCameras.isValidView(view)) return;
+    this._view = view;
+
+    var camera = this.getCamera();
+    camera.position.set(FluxCameras.DEFAULT_POSITIONS[view][0],
+                        FluxCameras.DEFAULT_POSITIONS[view][1],
+                        FluxCameras.DEFAULT_POSITIONS[view][2]);
+
+    camera.rotation.set(FluxCameras.DEFAULT_ROTATIONS[view][0],
+                        FluxCameras.DEFAULT_ROTATIONS[view][1],
+                        FluxCameras.DEFAULT_ROTATIONS[view][2]);
+};
+
+/**
+ * Recompute derived state when the camera is changed.
+ * @param  {Number} width  Width of the viewport (used to calculate aspect ratio)
+ * @param  {Number} height Height of the viewport (used to calculate aspect ratio)
+ */
+FluxCameras.prototype.updateCamera = function(width, height) {
+    this._perspCamera.aspect = width / height;
+    this._perspCamera.updateProjectionMatrix();
+
+    var a = width / height;
+    var h = this._orthoCamera.top - this._orthoCamera.bottom;
+    this._orthoCamera.top = h / 2;
+    this._orthoCamera.bottom = - h / 2;
+    this._orthoCamera.right = h / 2 * a;
+    this._orthoCamera.left = - h / 2 * a;
+    this._orthoCamera.updateProjectionMatrix();
+};
+
+/**
+ * Extract only relevant properties from a camera
+ * @param  {THREE.Camera} camera The camera source
+ * @return {Object}        The camera data
+ */
+FluxCameras.cameraToJSON = function(camera) {
+    var serializableCamera = {
+        px: camera.position.x,
+        py: camera.position.y,
+        pz: camera.position.z,
+        rx: camera.rotation.x,
+        ry: camera.rotation.y,
+        rz: camera.rotation.z,
+        near: camera.near,
+        far: camera.far
+    };
+    // Handle extra OrthographicCamera properties
+    if (camera instanceof THREE.OrthographicCamera) {
+        serializableCamera.top = camera.top;
+        serializableCamera.right = camera.right;
+        serializableCamera.bottom = camera.bottom;
+        serializableCamera.left = camera.left;
+        serializableCamera.type = 'orthographic';
+    } else {
+        serializableCamera.type = 'perspective';
+    }
+    return serializableCamera;
+};
+
+/**
+ * Check if something is anumber
+ * @param {Number} num The value
+ * @returns {boolean} True for numbers
+ * @private
+ */
+function _isNumber(num) {
+    return num != null && num.constructor === Number;
+}
+
+/**
+ * Check whether a set of properties are valid numbers
+ * @param {Array.<string>} schema The list of properties
+ * @param {Object} data The object with properties
+ * @returns {boolean} True if all numbers
+ * @private
+ */
+function _checkNumbers(schema, data) {
+    // Make sure all the properties are valid and exist
+    for (var i=0;i<schema.length;i++) {
+        if (!_isNumber(data[schema[i]])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Rehydrate camera instance from an object property tree.
+ * @param  {THREE.camera} camera The camera to receive data
+ * @param  {Object} data   The data to parse and apply
+ */
+FluxCameras.cameraFromJSON = function(camera, data) {
+    var schema = ['px', 'py', 'pz', 'rx', 'ry', 'rz', 'near', 'far'];
+    if (!_checkNumbers(schema, data)) return;
+    camera.position.x = data.px;
+    camera.position.y = data.py;
+    camera.position.z = data.pz;
+    camera.rotation.x = data.rx;
+    camera.rotation.y = data.ry;
+    camera.rotation.z = data.rz;
+    camera.near = data.near;
+    camera.far = data.far;
+
+    // Handle extra OrthographicCamera properties
+    if (camera.constructor === THREE.OrthographicCamera) {
+        schema = ['top', 'right', 'bottom', 'left'];
+        if (!_checkNumbers(schema, data)) return;
+        camera.top = data.top;
+        camera.right = data.right;
+        camera.bottom = data.bottom;
+        camera.left = data.left;
     }
 };
 
-FluxCameras.prototype.setView = function (newView) {
-    this.view = newView;
-    if (this.cameras[this.view]) {
-        this.camera = this.cameras[this.view];
-    }
-},
-
-FluxCameras.prototype.updateCamera = function() {
-    if (!this.camera) return;
-
-    if (this.camera instanceof THREE.PerspectiveCamera) {
-        this.camera.aspect = this.width / this.height;
-    }
-    if (this.camera instanceof THREE.OrthographicCamera) {
-        var a = this.width / this.height;
-        var h = this.camera.top - this.camera.bottom;
-        this.camera.top = h / 2;
-        this.camera.bottom = - h / 2;
-        this.camera.right = h / 2 * a;
-        this.camera.left = - h / 2 * a;
-    }
-    this.camera.updateProjectionMatrix();
-}
-
+/**
+ * Make serializable by pruning all references and building an object property tree
+ * @return {Object} The simplified model
+ */
+FluxCameras.prototype.toJSON = function() {
+    var serializableCameras = {
+        perspective: FluxCameras.cameraToJSON(this._perspCamera),
+        orthographic: FluxCameras.cameraToJSON(this._orthoCamera),
+        view: this._view
+    };
+    return serializableCameras;
+};
 
 /**
-* Save the relevant positioning information about current cameras.
-* This information is ready to be serialized for local storage.
-* TODO (Kyle) This function should be moved out of three-js since it is Flux specific
+* Update the corresponding cameras in this object from a serialized object.
+* @param  {Object} serializableCameras The camera data to use.
 */
-// serializeCameraStates: function() {
-//   var serializedCamera = {};
-//   // iterate over the camera for each view (ex. persp, top, etc.)
-//   for (var view in this.cameras) {
-//     var camera = this.cameras[view];
-//     serializedCamera[view] = {
-//       px: camera.position.x,
-//       py: camera.position.y,
-//       pz: camera.position.z,
-//       rx: camera.rotation.x,
-//       ry: camera.rotation.y,
-//       rz: camera.rotation.z,
-//       tx: camera._target.x,
-//       ty: camera._target.y,
-//       tz: camera._target.z,
-//       near: camera.near,
-//       far: camera.far
-//     };
-//     // Handle extra OrthographicCamera properties
-//     if (camera instanceof THREE.OrthographicCamera) {
-//       var currentCamera = serializedCamera[view];
-//       currentCamera["top"] = camera.top;
-//       currentCamera["right"] = camera.right;
-//       currentCamera["bottom"] = camera.bottom;
-//       currentCamera["left"] = camera.left;
-//     }
-//   }
-//   // Update camera and trigger observers
-//   this.cameraStates = serializedCamera;
-//   this.renderLater();
-// },
-
-/**
-* Observer for changes to cameraStates object.
-* When the object is changed, update the corresponding cameras.
-* @param  {Object} previousCameraStates Previous value, not used.
-* TODO (Kyle) This function should be moved out of three-js since it is Flux specific
-*/
-// deserializeCameraStates: function(previousCameraStates) {
-//   // iterate over the camera for each view (ex. persp, top, etc.)
-//   for (var view in this.cameraStates) {
-//     var camera = this.cameras[view];
-//     camera.position.x = this.cameraStates[view].px;
-//     camera.position.y = this.cameraStates[view].py;
-//     camera.position.z = this.cameraStates[view].pz;
-//     camera.rotation.x = this.cameraStates[view].rx;
-//     camera.rotation.y = this.cameraStates[view].ry;
-//     camera.rotation.z = this.cameraStates[view].rz;
-//     camera._target.x = this.cameraStates[view].tx;
-//     camera._target.y = this.cameraStates[view].ty;
-//     camera._target.z = this.cameraStates[view].tz;
-//     var near = this.cameraStates[view].near;
-//     if (near && near.constructor === Number) {
-//       camera.near = near;
-//     }
-//     var far = this.cameraStates[view].far;
-//     if (far && far.constructor === Number) {
-//       camera.far = far;
-//     }
-//     // Handle extra OrthographicCamera properties
-//     if (camera instanceof THREE.OrthographicCamera) {
-//       camera.top = this.cameraStates[view].top;
-//       camera.right = this.cameraStates[view].right;
-//       camera.bottom = this.cameraStates[view].bottom;
-//       camera.left = this.cameraStates[view].left;
-//     }
-//   }
-// },
+FluxCameras.prototype.fromJSON = function(serializableCameras) {
+    this.setView(serializableCameras.view);
+    FluxCameras.cameraFromJSON(this._perspCamera, serializableCameras.perspective);
+    FluxCameras.cameraFromJSON(this._orthoCamera, serializableCameras.orthographic);
+};

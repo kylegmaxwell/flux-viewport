@@ -5,20 +5,38 @@ export default function FluxRenderContext () {
     /**
     * Pointer to the shared THREE.js renderer
     */
-    this.renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        preserveDrawingBuffer: true,
-        alpha: false
-    });
-
+    try {
+        this._hasWebGL = true;
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            preserveDrawingBuffer: true,
+            alpha: false
+        });
+        this.renderer.autoClear = false;
+        this.renderer.autoClearStencil = false;
+        this.renderer.gammaInput = false;
+        this.renderer.gammaOutput = false;
+        // Allow interactive canvas to overlap other canvas
+        this.renderer.domElement.style.position = "absolute";
+    } catch (err) {
+        // Replace renderer with mock renderer for tests
+        this.renderer = {
+            render: function () {},
+            setSize: function () {},
+            clear: function () {},
+            setViewport: function () {},
+            setClearColor: function () {},
+            getSize: function () { return {width: 100, height: 100}; },
+            getPixelRatio: function () { return 1; },
+            domElement: document.createElement('div')
+        };
+        this._hasWebGL = false;
+    }
     /**
     * Pointer to the three-viewport-renderer instance that is currently being rendered.
     */
     this.currentHost = null;
-
-    // Allow interactive canvas to overlap other canvas
-    this.renderer.domElement.style.position = "absolute";
-};
+}
 
 /**
 * Maximum number of WebGL contexts allowed.
@@ -52,4 +70,8 @@ FluxRenderContext.getNewContext = function () {
         FluxRenderContext.contexts.push(context);
     }
     return context;
-}
+};
+
+FluxRenderContext.prototype.hasWebGL = function() {
+    return this._hasWebGL;
+};

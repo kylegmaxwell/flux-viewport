@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <meta charset="utf-8">
     <title>Flux Viewport</title>
     <script src="../lib/three.min.js"></script>
     <script src="../lib/flux-three-plugins.global.js"></script>
@@ -15,29 +16,17 @@
 
     var torus = {"origin": [0,0,0],"majorRadius": 5,"minorRadius":3,"axis":[0,0,1],"primitive":"torus"};
     var fluxViewport = null;
-    var fluxScene = null;
 
     function handleLoad() {
         fluxViewport = new FluxViewport(container);
-        fluxScene = fluxViewport.renderer.scene;
-        createLight(fluxScene);
+
+        fluxViewport.setupDefaultLighting();
+
         fluxViewport.setGeometryEntity(torus);
     }
 
-    // creates a directional light, adds to scene
-    function createLight(scene) {
-        var l = new THREE.DirectionalLight();
-        l.position.set(6, 8, 5);
-        scene.add(l);
-        return l;
-    }
-
     function focusAll() {
-        var vps = document.getElementsByTagName('three-viewport');
-        for (var i=0;i<vps.length;i++) {
-            var vp = vps[i];
-            vp.focus();
-        }
+        fluxViewport.focus();
     }
     </script>
 </body>
