@@ -1,6 +1,6 @@
 Flux Viewport
 
-make sure you have node version 4+
+Make sure you have node version 4+
 
 npm install
 
