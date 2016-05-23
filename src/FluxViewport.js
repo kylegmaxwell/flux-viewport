@@ -4,6 +4,7 @@ import EdgesHelper from './EdgesHelper.js';
 import FluxRenderer from './FluxRenderer.js';
 import FluxCameras from './FluxCameras.js';
 import FluxGeometryBuilder from './FluxGeometryBuilder.js';
+import FluxJsonToThree from 'flux-json-to-three/build/index.common.js';
 
 /**
  * UI widget to render 3D geometry
@@ -83,6 +84,15 @@ FluxViewport.getEdgesModes = function () {
  */
 FluxViewport.getChangeEvent = function () {
     return FluxRenderer.CHANGE_EVENT;
+};
+
+/**
+ * Determines whether the entity or list of entities contains geometry
+ * @param  {Array.<Object>|Object}  entities Geometry data
+ * @return {Boolean}          True for objects/lists containing geometry
+ */
+FluxViewport.isKnownGeom = function (entities) {
+    return FluxJsonToThree.isKnownGeom(entities);
 };
 
 //---- Class member functions

@@ -1,6 +1,6 @@
 'use strict';
 
-import FluxJsonToThree from '../lib/flux-json-to-three.common.js';
+import FluxJsonToThree from 'flux-json-to-three/build/index.common.js';
 import modeling from 'flux-modelingjs/modeling-core.js';
 import setHeaders from './FluxRequest.js';
 

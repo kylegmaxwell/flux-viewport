@@ -1,12 +1,12 @@
 {
   "name": "flux-viewport",
-  "version": "1.0.0",
-  "description": "three.js Viewport for Flux",
+  "version": "0.0.1",
+  "description": "Flux viewport for visualizing geometry",
   "main": "index.js",
   "dependencies": {
-    "flux-json-to-three": "git+ssh://git@bitbucket.org/vannevartech/flux-json-to-three.git#6b5c6a4c9bc3df7b469b07bfea026af3bec93769",
-    "flux-modelingjs": "git+ssh://git@bitbucket.org/vannevartech/flux-modelingjs.git#57ba062174f3f93102cede8a5231dda4b4897bbc",
-    "flux-three-plugins": "git+ssh://git@bitbucket.org/vannevartech/flux-three-plugins.git#e2798ce813e38a286e47c7ba66271d77a0f5ea5c",
+    "flux-json-to-three": "git+ssh://git@bitbucket.org/vannevartech/flux-json-to-three.git",
+    "flux-modelingjs": "git+ssh://git@bitbucket.org/vannevartech/flux-modelingjs.git",
+    "flux-three-plugins": "git+ssh://git@bitbucket.org/vannevartech/flux-three-plugins.git",
     "rollup": "^0.25.8",
     "rollup-plugin-commonjs": "^2.2.1",
     "rollup-plugin-json": "^2.0.0",
@@ -22,23 +22,21 @@
     "lint": "eslint index.js src/**;",
     "test": "npm run clean-test; npm run init; npm run lint && npm run build-test && npm run run-test",
     "assemble": "cat ./test/threeStub.js > ./build/test_stubbed.js; cat ./build/test.js >> ./build/test_stubbed.js;",
-    "copy-lib": "cp node_modules/flux-three-plugins/build/index.global.js lib/flux-three-plugins.global.js; cp node_modules/flux-json-to-three/build/index.common.js lib/flux-json-to-three.common.js",
     "clean": "rm -rf build",
     "clean-test": "rm -rf build/test*",
     "init": "mkdir -p build",
-    "build-amd": "rollup -c rollup.config.js -f=amd > ./build/flux-viewport.amd.js;",
-    "build-globals": "rollup -c rollup.config.js -f=iife -n=FluxViewport > ./build/flux-viewport.global.js",
-    "build-test": "rollup -c rollup-test.config.js -f=cjs > ./build/test.js; npm run assemble;",
+    "build-amd":     "rollup -c rollup.config.js -f=amd -o=./build/flux-viewport.amd.js;",
+    "build-globals": "rollup -c rollup.config.js -f=iife -n=FluxViewport -o=./build/flux-viewport.global.js",
+    "build-test":    "rollup -c rollup-test.config.js -f=cjs -o=./build/test.js; npm run assemble;",
     "run-test": "tape build/test_stubbed.js",
     "build": "npm run clean; npm run init; npm run build-globals; npm run build-amd; npm run build-test",
-    "copy-files": "cp node_modules/flux-json-to-three/build/index.common.js lib/flux-json-to-three.common.js; cp node_modules/flux-three-plugins/build/index.global.js lib/flux-three-plugins.global.js;",
-    "postinstall": "npm run clean; npm run init; npm run build; npm run copy-files "
+    "postinstall": "npm run clean; npm run init; npm run build;"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/kylegmaxwell/three-js-live.git"
+    "url": "git@bitbucket.org:vannevartech/flux-viewport.git"
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/kylegmaxwell/three-js-live#readme"
+  "homepage": "https://bitbucket.org/vannevartech/flux-viewport"
 }
