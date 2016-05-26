@@ -3,7 +3,6 @@
 import EdgesHelper from './EdgesHelper.js';
 import FluxRenderer from './FluxRenderer.js';
 import FluxCameras from './FluxCameras.js';
-import FluxGeometryBuilder from './FluxGeometryBuilder.js';
 import FluxJsonToThree from 'flux-json-to-three/build/index.common.js';
 
 /**
@@ -46,7 +45,7 @@ export default function FluxViewport (domParent, optionalParams) {
         throw new Error('domParent must be specified to FluxViewport');
     }
 
-    this._geometryBuilder = new FluxGeometryBuilder(tessUrl, iblUrl);
+    this._geometryBuilder = new FluxJsonToThree.GeometryBuilder(tessUrl, iblUrl);
 
     this._renderer = new FluxRenderer(domParent, renderWidth, renderHeight);
     this._initCallback();
