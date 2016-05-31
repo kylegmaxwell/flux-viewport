@@ -4,7 +4,7 @@
   "description": "Flux viewport for visualizing geometry",
   "main": "index.js",
   "dependencies": {
-    "flux-json-to-three": "git+ssh://git@bitbucket.org/vannevartech/flux-json-to-three.git#359eed226a9798053d89e864cea8b58b9d8f89ca",
+    "flux-json-to-three": "git+ssh://git@bitbucket.org/vannevartech/flux-json-to-three.git#8b5dbcb0e71196e6333603a68425c7f4d612ac96",
     "flux-three-plugins": "git+ssh://git@bitbucket.org/vannevartech/flux-three-plugins.git#64f6fdddcc83819193867e0a1f86036401f8db8d",
     "rollup": "^0.25.8",
     "rollup-plugin-commonjs": "^2.2.1",
