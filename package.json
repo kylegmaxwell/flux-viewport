@@ -1,11 +1,11 @@
 {
   "name": "flux-viewport",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Flux viewport for visualizing geometry",
-  "main": "index.js",
+  "main": "dist/flux-viewport-bundle.global.js",
   "dependencies": {
-    "flux-json-to-three": "git+ssh://git@bitbucket.org/vannevartech/flux-json-to-three.git#8b5dbcb0e71196e6333603a68425c7f4d612ac96",
-    "flux-three-plugins": "git+ssh://git@bitbucket.org/vannevartech/flux-three-plugins.git#64f6fdddcc83819193867e0a1f86036401f8db8d",
+    "flux-json-to-three": "0.0.1",
+    "flux-three-plugins": "0.0.2",
     "rollup": "^0.25.8",
     "rollup-plugin-commonjs": "^2.2.1",
     "rollup-plugin-json": "^2.0.0",
@@ -22,20 +22,21 @@
     "test": "npm run clean-test; npm run init; npm run lint && npm run build-test && npm run run-test",
     "assemble-test": "cat ./test/threeStub.js ./build/test.js > ./build/test_stubbed.js;",
     "assemble": "cat node_modules/flux-three-plugins/build/flux-three.min.js build/flux-viewport.global.js > build/flux-viewport-bundle.global.js;",
+    "release": "cp build/flux-viewport-bundle.global.js dist/",
     "clean": "rm -rf build",
     "clean-test": "rm -rf build/test*",
     "init": "mkdir -p build",
     "build-globals": "rollup -c rollup.config.js -f=iife -n=FluxViewport -o=./build/flux-viewport.global.js",
-    "build-test":    "rollup -c rollup-test.config.js -f=cjs -o=./build/test.js; npm run assemble-test;",
+    "build-test": "rollup -c rollup-test.config.js -f=cjs -o=./build/test.js; npm run assemble-test;",
     "run-test": "tape build/test_stubbed.js",
     "postinstall": "npm run build",
-    "build": "npm run clean; npm run init; npm run build-globals; npm run build-test; npm run assemble"
+    "build": "npm run clean; npm run init; npm run build-globals; npm run build-test; npm run assemble; npm run release"
   },
   "repository": {
     "type": "git",
     "url": "git@bitbucket.org:vannevartech/flux-viewport.git"
   },
-  "author": "",
+  "author": "Flux Factory",
   "license": "ISC",
   "homepage": "https://bitbucket.org/vannevartech/flux-viewport"
 }
