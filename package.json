@@ -1,6 +1,6 @@
 {
   "name": "flux-viewport",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
   "dependencies": {
@@ -22,7 +22,7 @@
     "test": "npm run clean-test; npm run init; npm run lint && npm run build-test && npm run run-test",
     "assemble-test": "cat ./test/threeStub.js ./build/test.js > ./build/test_stubbed.js;",
     "assemble": "cat node_modules/flux-three-plugins/build/flux-three.min.js build/flux-viewport.global.js > build/flux-viewport-bundle.global.js;",
-    "release": "cp build/flux-viewport-bundle.global.js dist/",
+    "release": "echo 'Copy release to dist'; cp build/flux-viewport-bundle.global.js dist/",
     "clean": "rm -rf build",
     "clean-test": "rm -rf build/test*",
     "init": "mkdir -p build",
@@ -30,7 +30,8 @@
     "build-test": "rollup -c rollup-test.config.js -f=cjs -o=./build/test.js; npm run assemble-test;",
     "run-test": "tape build/test_stubbed.js",
     "postinstall": "npm run build",
-    "build": "npm run clean; npm run init; npm run build-globals; npm run build-test; npm run assemble; npm run release"
+    "prepublish": "npm run build; npm run release",
+    "build": "npm run clean; npm run init; npm run build-globals; npm run build-test; npm run assemble"
   },
   "repository": {
     "type": "git",
