@@ -69,13 +69,13 @@ FluxHelpers.prototype.setView = function(view) {
         // facing Z
         this._grid.rotation.set(Math.PI / 2, 0, 0);
         break;
-    case FluxCameras.VIEWS.front:
-    case FluxCameras.VIEWS.back:
+    case FluxCameras.VIEWS.right:
+    case FluxCameras.VIEWS.left:
         // facing X
         this._grid.rotation.set(0, 0, Math.PI / 2);
         break;
-    case FluxCameras.VIEWS.right:
-    case FluxCameras.VIEWS.left:
+    case FluxCameras.VIEWS.front:
+    case FluxCameras.VIEWS.back:
         // facing Y
         this._grid.rotation.set(0, 0, 0);
         break;

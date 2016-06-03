@@ -52,10 +52,10 @@ FluxCameras.DEFAULT_ROTATIONS = [
     [0, 0, 0], // perspective
     [0, 0, 0], // top
     [0, Math.PI, 0], // bottom
-    [Math.PI/2, Math.PI/2, 0], // front
-    [Math.PI/2, -Math.PI/2, 0], // back
-    [Math.PI/2, 0, 0], // right
-    [Math.PI/2, Math.PI, 0] // left
+    [Math.PI/2, 0, 0], // front
+    [Math.PI/2, Math.PI, 0], // back
+    [Math.PI/2, Math.PI/2, 0], // right
+    [Math.PI/2, -Math.PI/2, 0] // left
 ];
 
 FluxCameras.isValidView = function (view) {
