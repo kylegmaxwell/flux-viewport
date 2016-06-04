@@ -15,6 +15,7 @@ THREE.Vector3.prototype.copy = function () { return this; };
 THREE.Vector3.prototype.clone = function () { return this; };
 THREE.Vector3.prototype.add = function () { return this; };
 THREE.Vector3.prototype.set = function () { return this; };
+THREE.Vector3.prototype.cross = function () { return this; };
 THREE.Vector3.prototype.length = function () { return 1; };
 THREE.Vector3.prototype.normalize = function () { return this; };
 THREE.Vector3.prototype.sub = function () { return this; };

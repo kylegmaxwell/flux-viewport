@@ -1,11 +1,11 @@
 {
   "name": "flux-viewport",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
   "dependencies": {
-    "flux-json-to-three": "0.0.1",
-    "flux-three-plugins": "0.0.2",
+    "flux-json-to-three": "0.0.3",
+    "flux-three-plugins": "0.0.5",
     "rollup": "^0.25.8",
     "rollup-plugin-commonjs": "^2.2.1",
     "rollup-plugin-json": "^2.0.0",
