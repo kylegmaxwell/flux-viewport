@@ -1,9 +1,11 @@
 'use strict';
 
+import THREE from 'three';
 import EdgesHelper from './EdgesHelper.js';
 import FluxCameras from './FluxCameras.js';
-import FluxHelpers from './FluxHelpers.js';
+import FluxHelpers from './helpers/FluxHelpers.js';
 import FluxRenderContext from './FluxRenderContext.js';
+import * as FluxThreePlugins from 'flux-three-plugins/src/index.js';
 
 // Multipass Variables (private, singleton)
 // Material that writes depth to pixels
@@ -38,7 +40,7 @@ export default function FluxRenderer(domParent, width, height) {
     // Dom element that wraps the canvas
     this._domParent = domParent;
 
-    // Determines if multipass rendering (THREE.EffectsComposer) is used
+    // Determines if multipass rendering (FluxThreePlugins.EffectsComposer) is used
     this._multipass = false;
 
     // TODO: Convert this to a list of passes rather than individual bools
@@ -59,7 +61,7 @@ export default function FluxRenderer(domParent, width, height) {
     this._context = FluxRenderContext.getNewContext();
 
     // EffectComposer object, used in multipass rendering
-    this._composer = new THREE.EffectComposer(this._context.renderer);
+    this._composer = new FluxThreePlugins.EffectComposer(this._context.renderer);
 
     this._width = width;
     this._height = height;
@@ -95,7 +97,7 @@ export default function FluxRenderer(domParent, width, height) {
     this._shadowColor = new THREE.Color(0.08, 0.0, 0.2);
     // Alpha opacity of shadow, where 1.0 is completely opaque
     this._shadowAlpha = 0.35;
-    this._shadowBuilder = new THREE.ShadowBuilder(this._shadowLight);
+    this._shadowBuilder = new FluxThreePlugins.ShadowBuilder(this._shadowLight);
 
     this._addPasses();
 }
@@ -175,7 +177,7 @@ FluxRenderer.prototype.setEdgesMode = function(mode) {
 FluxRenderer.prototype._initControls = function() {
     if (this._controls) this._controls.enabled = false;
     //TODO(Kyle): rewrite EditorControls to allow camera to be changed
-    this._controls = new THREE.EditorControls(this._cameras.getCamera(), this._domParent);
+    this._controls = new FluxThreePlugins.EditorControls(this._cameras.getCamera(), this._domParent);
     var _this = this;
     this._controls.addEventListener(FluxRenderer.CHANGE_EVENT, function(event) {
         _this._cameras.updateCamera(_this._width, _this._height);
@@ -289,11 +291,11 @@ FluxRenderer.prototype._addPasses = function() {
     this._addRenderTargets();
 
     // diffuse render pass
-    var renderPass = new THREE.RenderPass(this._scene, this._cameras.getCamera());
+    var renderPass = new FluxThreePlugins.RenderPass(this._scene, this._cameras.getCamera());
     this._composer.addPass(renderPass);
     this._renderPasses.renderPass = renderPass;
 
-    var edgesPass = new THREE.RenderPass(this._edgesScene, this._cameras.getCamera());
+    var edgesPass = new FluxThreePlugins.RenderPass(this._edgesScene, this._cameras.getCamera());
     edgesPass.clear = false;
     this._composer.addPass(edgesPass);
     edgesPass.polygonOffset = true;
@@ -301,14 +303,14 @@ FluxRenderer.prototype._addPasses = function() {
     this._renderPasses.edgesPass = edgesPass;
 
     // helper render pass
-    var helperPass = new THREE.RenderPass(this._helpersScene, this._cameras.getCamera());
+    var helperPass = new FluxThreePlugins.RenderPass(this._helpersScene, this._cameras.getCamera());
     helperPass.clear = false;
     this._composer.addPass(helperPass);
     this._renderPasses.helperPass = helperPass;
     helperPass.enabled = true;
 
     // ambient occlusion pass
-    var aoPass = new THREE.ShaderPass(THREE.SAOShader);
+    var aoPass = new FluxThreePlugins.ShaderPass(FluxThreePlugins.SAOShader);
     // set uniform vars for ao pass
     aoPass.uniforms.tDepth.value = this._depthTarget;
     aoPass.uniforms.tNorm.value = this._normalTarget;
@@ -320,29 +322,29 @@ FluxRenderer.prototype._addPasses = function() {
     this._composer.addPass(aoPass);
 
     // stencil buffer shadow passes
-    var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+    var copyPass = new FluxThreePlugins.ShaderPass( FluxThreePlugins.CopyShader );
     copyPass.needsSwap = false;
     this._composer.addPass( copyPass ); // copy AO to write buffer
     this._renderPasses.copyPass = copyPass;
 
-    var stencilPass = new THREE.StencilPass( this._shadowScene, this._cameras.getCamera());
+    var stencilPass = new FluxThreePlugins.StencilPass( this._shadowScene, this._cameras.getCamera());
     this._composer.addPass( stencilPass ); // render shadow volumes to stencilbuffer
     this._renderPasses.stencilPass = stencilPass;
 
-    var darkenPass = new THREE.ShaderPass( THREE.DarkenShader );
+    var darkenPass = new FluxThreePlugins.ShaderPass( FluxThreePlugins.DarkenShader );
     darkenPass.uniforms.alpha.value = this._shadowAlpha;
     darkenPass.uniforms.color.value = new THREE.Vector3(this._shadowColor.r, this._shadowColor.g, this._shadowColor.b);
     darkenPass.needsSwap = false;
     this._composer.addPass( darkenPass ); // darken stencil areas
     this._renderPasses.darkenPass = darkenPass;
 
-    var clearPass = new THREE.ClearStencilPass();
+    var clearPass = new FluxThreePlugins.ClearStencilPass();
     clearPass.needsSwap = true;
     this._composer.addPass( clearPass ); // clear stencil
     this._renderPasses.clearPass = clearPass;
 
     // fast approximate antialiasing pass
-    var FXAAPass = new THREE.ShaderPass(THREE.FXAAShader);
+    var FXAAPass = new FluxThreePlugins.ShaderPass(FluxThreePlugins.FXAAShader);
     FXAAPass.renderToScreen = true;
     this._renderPasses.FXAAPass = FXAAPass;
     this._composer.addPass(FXAAPass);

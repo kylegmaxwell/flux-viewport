@@ -1,3 +1,7 @@
+'use strict';
+
+import THREE from 'three';
+
 /**
 * Class to represent a WebGL context which can render for multiple viewports
 */

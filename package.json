@@ -1,43 +1,42 @@
 {
   "name": "flux-viewport",
-  "version": "0.0.8",
+  "version": "0.1.2",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
-  "dependencies": {
-    "flux-json-to-three": "0.0.4",
-    "flux-three-plugins": "0.0.5",
-    "rollup": "^0.25.8",
-    "rollup-plugin-commonjs": "^2.2.1",
-    "rollup-plugin-json": "^2.0.0",
-    "rollup-plugin-node-resolve": "^1.5.0",
-    "tape": "^4.2.2"
+  "repository": "git@bitbucket.org:vannevartech/flux-viewport.git",
+  "author": "Flux Factory",
+  "keywords": [
+    "3D"
+  ],
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/vannevartech/flux-viewport",
+  "scripts": {
+    "lint": "eslint index.js src/**;",
+    "test": "npm run clean-test; npm run init; npm run lint && npm run build-common && npm run build-test && npm run run-test",
+    "assemble": "cat node_modules/three/three.min.js build/flux-viewport.global.js > build/flux-viewport-bundle.global.js;",
+    "release": "echo 'Copy release to dist'; cp build/flux-viewport-bundle.global.js dist/",
+    "clean": "rm build/flux-viewport*",
+    "clean-test": "rm -rf build/test*",
+    "init": "mkdir -p build",
+    "build-globals": "rollup -c rollup.config.js -f=iife -n=FluxViewport -o=./build/flux-viewport.global.js",
+    "build-common": "rollup -c rollup.config.js -f=cjs -o=./build/flux-viewport.common.js",
+    "build-test": "rollup -c rollup-test.config.js -f=cjs -o=./build/test.common.js;",
+    "run-test": "tape test/test.js",
+    "prepublish": "npm run build; npm run release",
+    "build": "npm run clean; npm run init; npm run build-globals; npm run assemble"
   },
   "devDependencies": {
     "ajv": "^4.0.3",
     "eslint": "^1.9.0",
-    "resemblejs": "^2.2.0"
-  },
-  "scripts": {
-    "lint": "eslint index.js src/**;",
-    "test": "npm run clean-test; npm run init; npm run lint && npm run build-test && npm run run-test",
-    "assemble-test": "cat ./test/threeStub.js ./build/test.js > ./build/test_stubbed.js;",
-    "assemble": "cat node_modules/flux-three-plugins/build/flux-three.min.js build/flux-viewport.global.js > build/flux-viewport-bundle.global.js;",
-    "release": "echo 'Copy release to dist'; cp build/flux-viewport-bundle.global.js dist/",
-    "clean": "rm -rf build",
-    "clean-test": "rm -rf build/test*",
-    "init": "mkdir -p build",
-    "build-globals": "rollup -c rollup.config.js -f=iife -n=FluxViewport -o=./build/flux-viewport.global.js",
-    "build-test": "rollup -c rollup-test.config.js -f=cjs -o=./build/test.js; npm run assemble-test;",
-    "run-test": "tape build/test_stubbed.js",
-    "postinstall": "npm run build",
-    "prepublish": "npm run build; npm run release",
-    "build": "npm run clean; npm run init; npm run build-globals; npm run build-test; npm run assemble"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@bitbucket.org:vannevartech/flux-viewport.git"
-  },
-  "author": "Flux Factory",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/vannevartech/flux-viewport"
+    "flux-json-to-three": "0.1.2",
+    "flux-three-plugins": "0.1.1",
+    "resemblejs": "^2.2.0",
+    "rollup": "^0.26.7",
+    "rollup-plugin-commonjs": "^2.2.1",
+    "rollup-plugin-json": "^2.0.0",
+    "rollup-plugin-node-resolve": "^1.5.0",
+    "rollup-plugin-replace": "^1.1.0",
+    "tape": "^4.2.2",
+    "three": "^0.72.0"
+  }
 }

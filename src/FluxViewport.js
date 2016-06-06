@@ -1,9 +1,10 @@
 'use strict';
 
+import THREE from 'three';
 import EdgesHelper from './EdgesHelper.js';
 import FluxRenderer from './FluxRenderer.js';
 import FluxCameras from './FluxCameras.js';
-import FluxJsonToThree from 'flux-json-to-three/build/index.common.js';
+import * as FluxJsonToThree from 'flux-json-to-three/src/index.js';
 
 /**
  * UI widget to render 3D geometry

@@ -1,8 +1,24 @@
 'use strict';
 
-import test from 'tape';
-import FluxViewport from '../src/FluxViewport.js';
-import * as tests from './index.test.js'
+// Stub out browser globals
+global.window = {};
+global.document = {};
+
+document.createElement = function() {
+    return {
+        width: 100,
+        height: 100,
+        style: {position: ''},
+        appendChild: function () {},
+        getContext: function () {},
+        addEventListener: function () {}
+    };
+};
+
+var test = require('tape');
+var THREE = require('three/three.js');
+var FluxViewport = require('../build/flux-viewport.common.js');
+var tests = require('../build/test.common.js');
 
 test('Create a viewport', function (t) {
     var domElement = document.createElement();

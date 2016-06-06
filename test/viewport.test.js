@@ -2,6 +2,7 @@
 
 import FluxViewport from '../src/FluxViewport.js';
 import viewportState from './viewportState.json'
+
 // This is a stub
 var domElement = document.createElement();
 

@@ -1,6 +1,8 @@
 'use strict';
 
-import FluxCameras from './FluxCameras.js';
+import THREE from 'three';
+import FluxCameras from '../FluxCameras.js';
+import AxisHelper from './AxisHelper.js';
 
 /**
  * Manages reference objects that render in the scene.
@@ -47,7 +49,7 @@ FluxHelpers.prototype._setupGrid = function(size, width, color1, color2) {
  * @return {THREE.Object3D} The axis object
  */
 FluxHelpers.prototype._setupAxis = function() {
-    var axis = new THREE.AxisHelper(10);
+    var axis = new AxisHelper(10);
     axis.traverse(function(child) {
         if (child.material ) {
             child.material.depthWrite = false;

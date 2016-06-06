@@ -1,5 +1,7 @@
 'use strict';
 
+import THREE from 'three';
+
 /**
  * Whether to draw edges on front and back faces
  */

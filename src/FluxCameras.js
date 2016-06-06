@@ -1,5 +1,7 @@
 'use strict';
 
+import THREE from 'three';
+
 export default function FluxCameras(width, height) {
     // Initialize default cameras and frustums.
     this._perspCamera = new THREE.PerspectiveCamera(30, width/height, 0.1, 100000);

@@ -1,6 +1,6 @@
 'use strict';
 
-import FluxHelpers from '../src/FluxHelpers.js';
+import FluxHelpers from '../src/helpers/FluxHelpers.js';
 
 export function initHelpers(t) {
     var helpers = new FluxHelpers();
