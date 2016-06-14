@@ -49,7 +49,7 @@ export default function FluxViewport (domParent, optionalParams) {
         throw new Error('domParent must be specified to FluxViewport');
     }
 
-    this._geometryBuilder = new FluxJsonToThree.GeometryBuilder(tessUrl, iblUrl, token);
+    this._sceneBuilder = new FluxJsonToThree.SceneBuilder(tessUrl, iblUrl, token);
 
     this._renderer = new FluxRenderer(domParent, renderWidth, renderHeight);
     this._initCallback();
@@ -63,11 +63,16 @@ export default function FluxViewport (domParent, optionalParams) {
     // Cache of the Flux entity objects for downloading
     this._entities = null;
 
+    this._latestSceneResults = null;
+
     // Track the last blob that was downloaded for memory cleanup
     this._downloadUrl = null;
 
     // Whether the viewport is locked on the current geometry and will automatically focus on new geometry when updating the entities
     this._autoFocus = true;
+
+    // Track whether geometry is being converted, so we don't try two at once
+    this.running = false;
 }
 
 FluxViewport.prototype = Object.create( THREE.EventDispatcher.prototype );
@@ -153,15 +158,27 @@ FluxViewport.prototype.setGeometryEntity = function(data) {
     // sent while there is already one pending are redundant
     // TODO(Kyle): This is a hack that we can remove once there are not always duplicate requests
     return new Promise(function (resolve, reject) {
-        if (!_this._geometryBuilder.running) {
-            return _this._geometryBuilder.convert(data).then(function (results) {
-                _this._entities = results.meshIsEmpty() ? null : data;
-                _this._updateModel(results.getMesh());
+        if (!_this.running) {
+            _this.running = true;
+            return _this._sceneBuilder.convert(data).then(function (results) {
+                var object = results.getObject();
+                _this._entities = object ? data : null;
+                _this._updateModel(object);
+                _this._latestSceneResults = results;
+                _this.running = false;
                 resolve(results);
+            }).catch(function (err) {
+                console.warn(err); // eslint-disable-line no-console
+                _this.running = false;
             });
         } else {
             reject(new Error('Already running. You can only convert one entity at a time.'));
         }
+    }).catch(function (err) {
+        if (err.message.indexOf('running') === -1) {
+            console.log(err); // eslint-disable-line no-console
+        }
+        throw err;
     });
 };
 
@@ -339,7 +356,7 @@ FluxViewport.prototype.setFogDensity = function(density) {
  * @param {String} newUrl The url of the tessellation server
  */
 FluxViewport.prototype.setTessUrl = function(newUrl) {
-    this._geometryBuilder._parasolidUrl = newUrl;
+    this._sceneBuilder.setTessUrl(newUrl);
 };
 
 /**
@@ -383,4 +400,15 @@ FluxViewport.prototype.activateShadows = function() {
 
     this._renderer.setShadowLight(this._keyLight);
     this._renderer.addShadows();
+};
+
+/**
+ * Get a layer object that allows manipulating specific properties
+ * @param  {String} id Unique layer identifier
+ * @return {FluxLayer}    Layer interface object with setters
+ */
+FluxViewport.prototype.getLayerById = function(id) {
+    if (!this._latestSceneResults)
+        return null;
+    return this._latestSceneResults.getLayerById(id);
 };
