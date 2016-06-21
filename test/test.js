@@ -3,6 +3,7 @@
 // Stub out browser globals
 global.window = {};
 global.document = {};
+global.self = global;
 
 document.createElement = function() {
     return {

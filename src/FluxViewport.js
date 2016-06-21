@@ -14,6 +14,7 @@ import * as FluxJsonToThree from 'flux-json-to-three/src/index.js';
  * @param {Number}    optionalParams.height        The height of the canvas
  * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests
  * @param {String}    optionalParams.iblUrl        The url to get textures for image based lighting
+ * @param {String}    optionalParams.token         The current flux auth token
  */
 export default function FluxViewport (domParent, optionalParams) {
 
@@ -21,11 +22,13 @@ export default function FluxViewport (domParent, optionalParams) {
     var height;
     var tessUrl;
     var iblUrl;
+    var token;
     if (optionalParams) {
         width = optionalParams.width;
         height = optionalParams.height;
         tessUrl = optionalParams.tessUrl;
         iblUrl = optionalParams.iblUrl;
+        token = optionalParams.token;
     }
 
     var renderWidth = 100;//px
@@ -46,7 +49,7 @@ export default function FluxViewport (domParent, optionalParams) {
         throw new Error('domParent must be specified to FluxViewport');
     }
 
-    this._geometryBuilder = new FluxJsonToThree.GeometryBuilder(tessUrl, iblUrl);
+    this._geometryBuilder = new FluxJsonToThree.GeometryBuilder(tessUrl, iblUrl, token);
 
     this._renderer = new FluxRenderer(domParent, renderWidth, renderHeight);
     this._initCallback();
