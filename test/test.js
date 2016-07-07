@@ -17,7 +17,7 @@ document.createElement = function() {
 };
 
 var test = require('tape');
-var THREE = require('three/three.js');
+var THREE = require('three');
 var FluxViewport = require('../build/flux-viewport.common.js');
 var tests = require('../build/test.common.js');
 

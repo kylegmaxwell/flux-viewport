@@ -6,18 +6,7 @@ import FluxCameras from './FluxCameras.js';
 import FluxHelpers from './helpers/FluxHelpers.js';
 import FluxRenderContext from './FluxRenderContext.js';
 import * as FluxThreePlugins from 'flux-three-plugins/src/index.js';
-
-// Multipass Variables (private, singleton)
-// Material that writes depth to pixels
-var DEPTH_MATERIAL = new THREE.ShaderMaterial( {
-    uniforms: THREE.UniformsUtils.clone( THREE.ShaderLib.depthRGBA.uniforms ),
-    fragmentShader: THREE.ShaderLib.depthRGBA.fragmentShader,
-    vertexShader: THREE.ShaderLib.depthRGBA.vertexShader,
-    blending: THREE.NoBlending
-} );
-
-// Material that writes normal to pixels
-var NORMAL_MATERIAL = new THREE.MeshNormalMaterial();
+import * as shaders from './shaders.js';
 
 // Used for debugging issues with _setHost
 FluxRenderer.nextId = 0;
@@ -358,14 +347,14 @@ FluxRenderer.prototype._addPasses = function() {
 FluxRenderer.prototype._updatePasses = function () {
     if (this._showOcclusion) {
         // populate depth target
-        this._scene.overrideMaterial = DEPTH_MATERIAL;
+        this._scene.overrideMaterial = shaders.DEPTH_MATERIAL;
         this._context.renderer.clearTarget( this._depthTarget, true, true );
         this._context.renderer.render( this._scene, this._cameras.getCamera(), this._depthTarget );
 
         // populate normal target (set clearColor to (0,0,0) since
         // empty pixels do not have normals)
         this._context.renderer.setClearColor( 0x000000 );
-        this._scene.overrideMaterial = NORMAL_MATERIAL;
+        this._scene.overrideMaterial = shaders.NORMAL_MATERIAL;
         this._context.renderer.clearTarget( this._normalTarget, true, true );
         this._context.renderer.render( this._scene, this._cameras.getCamera(), this._normalTarget );
         this._scene.overrideMaterial = null;

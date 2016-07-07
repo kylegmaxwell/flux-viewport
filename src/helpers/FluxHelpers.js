@@ -36,8 +36,7 @@ FluxHelpers.prototype.constructor = FluxHelpers;
  * @return {Object3D}        The grid object
  */
 FluxHelpers.prototype._setupGrid = function(size, width, color1, color2) {
-    var grid = new THREE.GridHelper(size * width, size);
-    grid.setColors(new THREE.Color(color1), new THREE.Color(color2));
+    var grid = new THREE.GridHelper(size * width, size, new THREE.Color(color1), new THREE.Color(color2));
     grid.material.transparent = true;
     grid.material.opacity = 0.5;
     grid.material.depthWrite = false;

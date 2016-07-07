@@ -1,6 +1,6 @@
 {
   "name": "flux-viewport",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
   "repository": "git@bitbucket.org:vannevartech/flux-viewport.git",
@@ -14,7 +14,7 @@
     "lint": "eslint index.js src/**;",
     "test": "npm run clean-test; npm run init; npm run lint && npm run tests",
     "tests": "npm run build-common && npm run build-test && npm run run-test",
-    "assemble": "cat node_modules/three/three.min.js build/flux-viewport.global.js > build/flux-viewport-bundle.global.js;",
+    "assemble": "cat node_modules/three/build/three.min.js build/flux-viewport.global.js > build/flux-viewport-bundle.global.js;",
     "release": "echo 'Copy release to dist'; cp build/flux-viewport-bundle.global.js dist/",
     "clean": "rm -f build/flux-viewport*",
     "clean-test": "rm -rf build/test*",
@@ -30,9 +30,9 @@
     "@flux/flux-fetch": "git+ssh://git@bitbucket.org/vannevartech/flux-fetch.git#v0.0.4",
     "ajv": "^4.0.3",
     "eslint": "^1.9.0",
-    "flux-json-to-three": "0.6.0",
+    "flux-json-to-three": "0.7.0",
     "flux-modelingjs": "0.0.3",
-    "flux-three-plugins": "0.1.1",
+    "flux-three-plugins": "0.2.0",
     "json-pointer": "^0.5.0",
     "resemblejs": "^2.2.0",
     "rollup": "^0.26.7",
@@ -43,6 +43,6 @@
     "rollup-plugin-node-resolve": "^1.5.0",
     "rollup-plugin-replace": "^1.1.0",
     "tape": "^4.2.2",
-    "three": "^0.72.0"
+    "three": "^0.77.0"
   }
 }
