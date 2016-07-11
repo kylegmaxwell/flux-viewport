@@ -1,6 +1,6 @@
 {
   "name": "flux-viewport",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
   "repository": "git@bitbucket.org:vannevartech/flux-viewport.git",

@@ -12,12 +12,12 @@ import * as FluxJsonToThree from 'flux-json-to-three/src/index.js';
  * @param {Object}    optionalParams Object containing all other parameters
  * @param {Number}    optionalParams.width         The width of the canvas
  * @param {Number}    optionalParams.height        The height of the canvas
- * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests
+ * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests (overrides projectId) (deprecated)
+ * @param {String}    optionalParams.projectId     Id has for a flux project used to make tessellation requests
  * @param {String}    optionalParams.iblUrl        The url to get textures for image based lighting
  * @param {String}    optionalParams.token         The current flux auth token
  */
 export default function FluxViewport (domParent, optionalParams) {
-
     var width;
     var height;
     var tessUrl;
@@ -26,7 +26,11 @@ export default function FluxViewport (domParent, optionalParams) {
     if (optionalParams) {
         width = optionalParams.width;
         height = optionalParams.height;
-        tessUrl = optionalParams.tessUrl;
+        if (optionalParams.tessUrl) {
+            tessUrl = optionalParams.tessUrl;
+        } else if (optionalParams.projectId) {
+            tessUrl = _getTessUrl(optionalParams.projectId);
+        }
         iblUrl = optionalParams.iblUrl;
         token = optionalParams.token;
     }
@@ -77,6 +81,16 @@ export default function FluxViewport (domParent, optionalParams) {
 
 FluxViewport.prototype = Object.create( THREE.EventDispatcher.prototype );
 FluxViewport.prototype.constructor = FluxViewport;
+
+/**
+ * Build the url to use for tessellation requests to flux.
+ * @param  {String} projectId Hashed project id to use in url
+ * @return {String}           Url to use for tessellation requests
+ */
+function _getTessUrl(projectId) {
+    return 'https://flux.io/p/'+projectId+
+           '/api/blockexec?block=flux-internal/parasolid/Parasolid';
+}
 
 /**
  * Enumeration of edges rendering modes
