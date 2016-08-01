@@ -1,6 +1,6 @@
 {
   "name": "flux-viewport",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
   "repository": "git@bitbucket.org:vannevartech/flux-viewport.git",
@@ -30,7 +30,7 @@
     "@flux/flux-fetch": "git+ssh://git@bitbucket.org/vannevartech/flux-fetch.git#v0.0.4",
     "ajv": "^4.0.3",
     "eslint": "^1.9.0",
-    "flux-json-to-three": "0.9.0",
+    "flux-json-to-three": "0.10.0",
     "flux-modelingjs": "0.0.4",
     "flux-three-plugins": "0.3.0",
     "json-pointer": "^0.5.0",
