@@ -2,6 +2,12 @@
 
 import THREE from 'three';
 
+/**
+ * Class for managing multiple cameras used in a viewport.
+ * @class  FluxCameras
+ * @param {Number} width  Width of the viewport
+ * @param {Number} height Height of the viewport
+ */
 export default function FluxCameras(width, height) {
     // Initialize default cameras and frustums.
     this._perspCamera = new THREE.PerspectiveCamera(30, width/height, 0.1, 100000);
@@ -15,7 +21,8 @@ export default function FluxCameras(width, height) {
 }
 
 /**
- * Enumeration of all possible views for the camera
+ * Enumeration of all possible views for the camera.
+ * Values are perspective, top, bottom, front, back, right, left.
  * @type {Object}
  */
 FluxCameras.VIEWS = {

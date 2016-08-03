@@ -1,6 +1,6 @@
 {
   "name": "flux-viewport",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
   "repository": "git@bitbucket.org:vannevartech/flux-viewport.git",
@@ -11,7 +11,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/vannevartech/flux-viewport",
   "scripts": {
-    "lint": "eslint index.js src/**;",
+    "lint": "eslint src/**;",
     "test": "npm run clean-test; npm run init; npm run lint && npm run tests",
     "tests": "npm run build-common && npm run build-test && npm run run-test",
     "assemble": "cat node_modules/three/build/three.min.js build/flux-viewport.global.js > build/flux-viewport-bundle.global.js;",
@@ -24,7 +24,11 @@
     "build-test": "rollup -c rollup-test.config.js -f=cjs -o=./build/test.common.js;",
     "run-test": "tape test/test.js",
     "prepublish": "npm run build; npm run release",
-    "build": "npm run clean; npm run init; npm run build-globals; npm run assemble"
+    "build": "npm run clean; npm run init; npm run build-globals; npm run assemble",
+    "watch-doc": "nodemon --watch src --watch docs.md -x \"npm run doc\"",
+    "doc": "jsdoc -t node_modules/minami -R docs.md -d docs src/*.js",
+    "doc-md": "jsdoc2md src/FluxViewport.js > out/FluxViewport.md",
+    "start": "node index.js"
   },
   "devDependencies": {
     "@flux/flux-fetch": "git+ssh://git@bitbucket.org/vannevartech/flux-fetch.git#v0.0.4",
@@ -33,7 +37,11 @@
     "flux-json-to-three": "0.11.0",
     "flux-modelingjs": "0.0.5",
     "flux-three-plugins": "0.4.0",
+    "jsdoc": "^3.4.0",
+    "jsdoc-to-markdown": "^1.3.6",
     "json-pointer": "^0.5.0",
+    "minami": "^1.1.1",
+    "nodemon": "^1.10.0",
     "resemblejs": "^2.2.0",
     "rollup": "^0.26.7",
     "rollup-plugin-commonjs": "^2.2.1",
@@ -44,5 +52,8 @@
     "rollup-plugin-replace": "^1.1.0",
     "tape": "^4.2.2",
     "three": "^0.77.0"
+  },
+  "dependencies": {
+    "express": "^4.14.0"
   }
 }

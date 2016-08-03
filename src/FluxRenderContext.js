@@ -4,6 +4,7 @@ import THREE from 'three';
 
 /**
 * Class to represent a WebGL context which can render for multiple viewports
+* @class  FluxRenderContext
 */
 export default function FluxRenderContext () {
     /**
@@ -36,9 +37,7 @@ export default function FluxRenderContext () {
         };
         this._hasWebGL = false;
     }
-    /**
-    * Pointer to the three-viewport-renderer instance that is currently being rendered.
-    */
+    // Pointer to the three-viewport-renderer instance that is currently being rendered.
     this.currentHost = null;
 }
 
@@ -56,7 +55,7 @@ FluxRenderContext.nextContext = 0;
 
 /**
 * Each viewport uses the next available render context defined by this function
-* @return {[type]} [description]
+* @return {FluxRenderContext} The context instance
 */
 FluxRenderContext.getNextContext = function () {
     var i = FluxRenderContext.nextContext;

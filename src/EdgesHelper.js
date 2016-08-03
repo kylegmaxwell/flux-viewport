@@ -3,7 +3,8 @@
 import THREE from 'three';
 
 /**
- * Whether to draw edges on front and back faces
+ * Whether to draw edges on front and back faces.
+ * Values are NONE, FRONT, BACK, BOTH.
  */
 EdgesHelper.EDGES_MODES = {
     NONE: 0,
@@ -14,11 +15,12 @@ EdgesHelper.EDGES_MODES = {
 
 /**
  * Create an object to render the edges of a mesh
+ * @private
  * @param  {Three.Mesh} mesh            The mesh to convert
  * @param  {Three.Material} material    The material on the mesh
  * @return {Three.EdgesHelper}          The edges object
  */
-var createEdges = function(mesh, material) {
+var _createEdges = function(mesh, material) {
     var helper = new THREE.EdgesHelper(mesh);
     helper.material = material;
     helper.matrixAutoUpdate = false;
@@ -28,7 +30,8 @@ var createEdges = function(mesh, material) {
 
 /**
  * Create an object to render a mesh as edges
- * @param  {Three.Object3D} model The mesh
+ * @class EdgesHelper
+ * @param {Three.Object3D} model The mesh
  */
 export default function EdgesHelper(model) {
     THREE.Object3D.call( this );
@@ -47,10 +50,10 @@ export default function EdgesHelper(model) {
         if (child instanceof THREE.Mesh) {
             // create edge helper for front and back edges
             _this.add(
-                createEdges(child, _this.frontMaterial)
+                _createEdges(child, _this.frontMaterial)
             );
             _this.add(
-                createEdges(child, _this.backMaterial)
+                _createEdges(child, _this.backMaterial)
             );
         }
     });

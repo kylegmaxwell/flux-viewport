@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FluxCameras.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="EdgesHelper.html">EdgesHelper</a><ul class='methods'><li data-type='method'><a href="EdgesHelper.html#.AddEdges">AddEdges</a></li></ul></li><li><a href="FluxCameras.html">FluxCameras</a><ul class='methods'><li data-type='method'><a href="FluxCameras.html#.cameraFromJSON">cameraFromJSON</a></li><li data-type='method'><a href="FluxCameras.html#.cameraToJSON">cameraToJSON</a></li><li data-type='method'><a href="FluxCameras.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxCameras.html#getCamera">getCamera</a></li><li data-type='method'><a href="FluxCameras.html#setView">setView</a></li><li data-type='method'><a href="FluxCameras.html#toJSON">toJSON</a></li><li data-type='method'><a href="FluxCameras.html#updateCamera">updateCamera</a></li></ul></li><li><a href="FluxRenderContext.html">FluxRenderContext</a><ul class='methods'><li data-type='method'><a href="FluxRenderContext.html#.getNextContext">getNextContext</a></li></ul></li><li><a href="FluxRenderer.html">FluxRenderer</a><ul class='methods'><li data-type='method'><a href="FluxRenderer.html#addShadow">addShadow</a></li><li data-type='method'><a href="FluxRenderer.html#addShadows">addShadows</a></li><li data-type='method'><a href="FluxRenderer.html#anyValidPrims">anyValidPrims</a></li><li data-type='method'><a href="FluxRenderer.html#detach">detach</a></li><li data-type='method'><a href="FluxRenderer.html#doRender">doRender</a></li><li data-type='method'><a href="FluxRenderer.html#focus">focus</a></li><li data-type='method'><a href="FluxRenderer.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxRenderer.html#getGlCanvas">getGlCanvas</a></li><li data-type='method'><a href="FluxRenderer.html#homeCamera">homeCamera</a></li><li data-type='method'><a href="FluxRenderer.html#removeShadow">removeShadow</a></li><li data-type='method'><a href="FluxRenderer.html#setClearColor">setClearColor</a></li><li data-type='method'><a href="FluxRenderer.html#setEdgesMode">setEdgesMode</a></li><li data-type='method'><a href="FluxRenderer.html#setLights">setLights</a></li><li data-type='method'><a href="FluxRenderer.html#setModel">setModel</a></li><li data-type='method'><a href="FluxRenderer.html#setShadowLight">setShadowLight</a></li><li data-type='method'><a href="FluxRenderer.html#setSize">setSize</a></li><li data-type='method'><a href="FluxRenderer.html#setView">setView</a></li><li data-type='method'><a href="FluxRenderer.html#toJSON">toJSON</a></li></ul></li><li><a href="FluxViewport.html">FluxViewport</a><ul class='methods'><li data-type='method'><a href="FluxViewport.html#.getChangeEvent">getChangeEvent</a></li><li data-type='method'><a href="FluxViewport.html#.getEdgesModes">getEdgesModes</a></li><li data-type='method'><a href="FluxViewport.html#.getViews">getViews</a></li><li data-type='method'><a href="FluxViewport.html#.isKnownGeom">isKnownGeom</a></li><li data-type='method'><a href="FluxViewport.html#activateShadows">activateShadows</a></li><li data-type='method'><a href="FluxViewport.html#downloadState">downloadState</a></li><li data-type='method'><a href="FluxViewport.html#focus">focus</a></li><li data-type='method'><a href="FluxViewport.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxViewport.html#getAutoFocus">getAutoFocus</a></li><li data-type='method'><a href="FluxViewport.html#getGlCanvas">getGlCanvas</a></li><li data-type='method'><a href="FluxViewport.html#homeCamera">homeCamera</a></li><li data-type='method'><a href="FluxViewport.html#render">render</a></li><li data-type='method'><a href="FluxViewport.html#setAutoFocus">setAutoFocus</a></li><li data-type='method'><a href="FluxViewport.html#setClearColor">setClearColor</a></li><li data-type='method'><a href="FluxViewport.html#setEdgesMode">setEdgesMode</a></li><li data-type='method'><a href="FluxViewport.html#setFogDensity">setFogDensity</a></li><li data-type='method'><a href="FluxViewport.html#setGeometryEntity">setGeometryEntity</a></li><li data-type='method'><a href="FluxViewport.html#setGeometryJson">setGeometryJson</a></li><li data-type='method'><a href="FluxViewport.html#setSize">setSize</a></li><li data-type='method'><a href="FluxViewport.html#setTessUrl">setTessUrl</a></li><li data-type='method'><a href="FluxViewport.html#setupDefaultLighting">setupDefaultLighting</a></li><li data-type='method'><a href="FluxViewport.html#setView">setView</a></li><li data-type='method'><a href="FluxViewport.html#toJSON">toJSON</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#_deleteFromScene">_deleteFromScene</a></li><li><a href="global.html#_removeGeometries">_removeGeometries</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">FluxCameras.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import THREE from 'three';
+
+/**
+ * Class for managing multiple cameras used in a viewport.
+ * @class  FluxCameras
+ * @param {Number} width  Width of the viewport
+ * @param {Number} height Height of the viewport
+ */
+export default function FluxCameras(width, height) {
+    // Initialize default cameras and frustums.
+    this._perspCamera = new THREE.PerspectiveCamera(30, width/height, 0.1, 100000);
+    // Flux is Z up
+    this._perspCamera.up = new THREE.Vector3( 0, 0, 1 );
+
+    this._orthoCamera = new THREE.OrthographicCamera(100, -100, 100, -100, -1000, 1000);
+
+    this.setView(FluxCameras.VIEWS.perspective);
+    this.updateCamera(width, height);
+}
+
+/**
+ * Enumeration of all possible views for the camera.
+ * Values are perspective, top, bottom, front, back, right, left.
+ * @type {Object}
+ */
+FluxCameras.VIEWS = {
+    perspective:  0,
+    top:    1,
+    bottom: 2,
+    front:  3,
+    back:   4,
+    right:  5,
+    left:   6,
+    END:   7
+};
+
+/**
+ * Get the current camera object
+ * @return {THREE.Camera} The current camera
+ */
+FluxCameras.prototype.getCamera = function () {
+    if (this._view === FluxCameras.VIEWS.perspective) {
+        return this._perspCamera;
+    }
+    return this._orthoCamera;
+};
+
+FluxCameras.DEFAULT_POSITIONS = [
+    [2500000, 1000000, 1300000], // perspective
+    [0, 0, -100], // top
+    [0, 0, 100], // bottom
+    [0, 0, 0], // front
+    [0, 0, 0], // back
+    [0, 0, 0], // right
+    [0, 0, 0] // left
+];
+
+FluxCameras.DEFAULT_ROTATIONS = [
+    [0, 0, 0], // perspective
+    [0, 0, 0], // top
+    [0, Math.PI, 0], // bottom
+    [Math.PI/2, 0, 0], // front
+    [Math.PI/2, Math.PI, 0], // back
+    [Math.PI/2, Math.PI/2, 0], // right
+    [Math.PI/2, -Math.PI/2, 0] // left
+];
+
+FluxCameras.isValidView = function (view) {
+    return view != null &amp;&amp; view.constructor === Number &amp;&amp; view > -1 &amp;&amp; view &lt; FluxCameras.VIEWS.END;
+};
+
+/**
+ * Set the camera to the default coordinates for the given view.
+ * @param {FluxCameras.VIEWS} view The new view
+ */
+FluxCameras.prototype.setView = function (view) {
+    if (!FluxCameras.isValidView(view)) return;
+    this._view = view;
+
+    var camera = this.getCamera();
+    camera.position.set(FluxCameras.DEFAULT_POSITIONS[view][0],
+                        FluxCameras.DEFAULT_POSITIONS[view][1],
+                        FluxCameras.DEFAULT_POSITIONS[view][2]);
+
+    camera.rotation.set(FluxCameras.DEFAULT_ROTATIONS[view][0],
+                        FluxCameras.DEFAULT_ROTATIONS[view][1],
+                        FluxCameras.DEFAULT_ROTATIONS[view][2]);
+};
+
+/**
+ * Recompute derived state when the camera is changed.
+ * @param  {Number} width  Width of the viewport (used to calculate aspect ratio)
+ * @param  {Number} height Height of the viewport (used to calculate aspect ratio)
+ */
+FluxCameras.prototype.updateCamera = function(width, height) {
+    this._perspCamera.aspect = width / height;
+    this._perspCamera.updateProjectionMatrix();
+
+    var a = width / height;
+    var h = this._orthoCamera.top - this._orthoCamera.bottom;
+    this._orthoCamera.top = h / 2;
+    this._orthoCamera.bottom = - h / 2;
+    this._orthoCamera.right = h / 2 * a;
+    this._orthoCamera.left = - h / 2 * a;
+    this._orthoCamera.updateProjectionMatrix();
+};
+
+/**
+ * Extract only relevant properties from a camera
+ * @param  {THREE.Camera} camera The camera source
+ * @return {Object}        The camera data
+ */
+FluxCameras.cameraToJSON = function(camera) {
+    var serializableCamera = {
+        px: camera.position.x,
+        py: camera.position.y,
+        pz: camera.position.z,
+        rx: camera.rotation.x,
+        ry: camera.rotation.y,
+        rz: camera.rotation.z,
+        near: camera.near,
+        far: camera.far
+    };
+    // Handle extra OrthographicCamera properties
+    if (camera instanceof THREE.OrthographicCamera) {
+        serializableCamera.top = camera.top;
+        serializableCamera.right = camera.right;
+        serializableCamera.bottom = camera.bottom;
+        serializableCamera.left = camera.left;
+        serializableCamera.type = 'orthographic';
+    } else {
+        serializableCamera.type = 'perspective';
+    }
+    return serializableCamera;
+};
+
+/**
+ * Check if something is anumber
+ * @param {Number} num The value
+ * @returns {boolean} True for numbers
+ * @private
+ */
+function _isNumber(num) {
+    return num != null &amp;&amp; num.constructor === Number;
+}
+
+/**
+ * Check whether a set of properties are valid numbers
+ * @param {Array.&lt;string>} schema The list of properties
+ * @param {Object} data The object with properties
+ * @returns {boolean} True if all numbers
+ * @private
+ */
+function _checkNumbers(schema, data) {
+    // Make sure all the properties are valid and exist
+    for (var i=0;i&lt;schema.length;i++) {
+        if (!_isNumber(data[schema[i]])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Rehydrate camera instance from an object property tree.
+ * @param  {THREE.camera} camera The camera to receive data
+ * @param  {Object} data   The data to parse and apply
+ */
+FluxCameras.cameraFromJSON = function(camera, data) {
+    var schema = ['px', 'py', 'pz', 'rx', 'ry', 'rz', 'near', 'far'];
+    if (!_checkNumbers(schema, data)) return;
+    camera.position.x = data.px;
+    camera.position.y = data.py;
+    camera.position.z = data.pz;
+    camera.rotation.x = data.rx;
+    camera.rotation.y = data.ry;
+    camera.rotation.z = data.rz;
+    camera.near = data.near;
+    camera.far = data.far;
+
+    // Handle extra OrthographicCamera properties
+    if (camera.constructor === THREE.OrthographicCamera) {
+        schema = ['top', 'right', 'bottom', 'left'];
+        if (!_checkNumbers(schema, data)) return;
+        camera.top = data.top;
+        camera.right = data.right;
+        camera.bottom = data.bottom;
+        camera.left = data.left;
+    }
+};
+
+/**
+ * Make serializable by pruning all references and building an object property tree
+ * @return {Object} The simplified model
+ */
+FluxCameras.prototype.toJSON = function() {
+    var serializableCameras = {
+        perspective: FluxCameras.cameraToJSON(this._perspCamera),
+        orthographic: FluxCameras.cameraToJSON(this._orthoCamera),
+        view: this._view
+    };
+    return serializableCameras;
+};
+
+/**
+* Update the corresponding cameras in this object from a serialized object.
+* @param  {Object} serializableCameras The camera data to use.
+*/
+FluxCameras.prototype.fromJSON = function(serializableCameras) {
+    this.setView(serializableCameras.view);
+    FluxCameras.cameraFromJSON(this._perspCamera, serializableCameras.perspective);
+    FluxCameras.cameraFromJSON(this._orthoCamera, serializableCameras.orthographic);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Aug 05 2016 09:49:19 GMT-0700 (PDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

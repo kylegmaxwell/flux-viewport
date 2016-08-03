@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FluxRenderContext.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="EdgesHelper.html">EdgesHelper</a><ul class='methods'><li data-type='method'><a href="EdgesHelper.html#.AddEdges">AddEdges</a></li></ul></li><li><a href="FluxCameras.html">FluxCameras</a><ul class='methods'><li data-type='method'><a href="FluxCameras.html#.cameraFromJSON">cameraFromJSON</a></li><li data-type='method'><a href="FluxCameras.html#.cameraToJSON">cameraToJSON</a></li><li data-type='method'><a href="FluxCameras.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxCameras.html#getCamera">getCamera</a></li><li data-type='method'><a href="FluxCameras.html#setView">setView</a></li><li data-type='method'><a href="FluxCameras.html#toJSON">toJSON</a></li><li data-type='method'><a href="FluxCameras.html#updateCamera">updateCamera</a></li></ul></li><li><a href="FluxRenderContext.html">FluxRenderContext</a><ul class='methods'><li data-type='method'><a href="FluxRenderContext.html#.getNextContext">getNextContext</a></li></ul></li><li><a href="FluxRenderer.html">FluxRenderer</a><ul class='methods'><li data-type='method'><a href="FluxRenderer.html#addShadow">addShadow</a></li><li data-type='method'><a href="FluxRenderer.html#addShadows">addShadows</a></li><li data-type='method'><a href="FluxRenderer.html#anyValidPrims">anyValidPrims</a></li><li data-type='method'><a href="FluxRenderer.html#detach">detach</a></li><li data-type='method'><a href="FluxRenderer.html#doRender">doRender</a></li><li data-type='method'><a href="FluxRenderer.html#focus">focus</a></li><li data-type='method'><a href="FluxRenderer.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxRenderer.html#getGlCanvas">getGlCanvas</a></li><li data-type='method'><a href="FluxRenderer.html#homeCamera">homeCamera</a></li><li data-type='method'><a href="FluxRenderer.html#removeShadow">removeShadow</a></li><li data-type='method'><a href="FluxRenderer.html#setClearColor">setClearColor</a></li><li data-type='method'><a href="FluxRenderer.html#setEdgesMode">setEdgesMode</a></li><li data-type='method'><a href="FluxRenderer.html#setLights">setLights</a></li><li data-type='method'><a href="FluxRenderer.html#setModel">setModel</a></li><li data-type='method'><a href="FluxRenderer.html#setShadowLight">setShadowLight</a></li><li data-type='method'><a href="FluxRenderer.html#setSize">setSize</a></li><li data-type='method'><a href="FluxRenderer.html#setView">setView</a></li><li data-type='method'><a href="FluxRenderer.html#toJSON">toJSON</a></li></ul></li><li><a href="FluxViewport.html">FluxViewport</a><ul class='methods'><li data-type='method'><a href="FluxViewport.html#.getChangeEvent">getChangeEvent</a></li><li data-type='method'><a href="FluxViewport.html#.getEdgesModes">getEdgesModes</a></li><li data-type='method'><a href="FluxViewport.html#.getViews">getViews</a></li><li data-type='method'><a href="FluxViewport.html#.isKnownGeom">isKnownGeom</a></li><li data-type='method'><a href="FluxViewport.html#activateShadows">activateShadows</a></li><li data-type='method'><a href="FluxViewport.html#downloadState">downloadState</a></li><li data-type='method'><a href="FluxViewport.html#focus">focus</a></li><li data-type='method'><a href="FluxViewport.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxViewport.html#getAutoFocus">getAutoFocus</a></li><li data-type='method'><a href="FluxViewport.html#getGlCanvas">getGlCanvas</a></li><li data-type='method'><a href="FluxViewport.html#homeCamera">homeCamera</a></li><li data-type='method'><a href="FluxViewport.html#render">render</a></li><li data-type='method'><a href="FluxViewport.html#setAutoFocus">setAutoFocus</a></li><li data-type='method'><a href="FluxViewport.html#setClearColor">setClearColor</a></li><li data-type='method'><a href="FluxViewport.html#setEdgesMode">setEdgesMode</a></li><li data-type='method'><a href="FluxViewport.html#setFogDensity">setFogDensity</a></li><li data-type='method'><a href="FluxViewport.html#setGeometryEntity">setGeometryEntity</a></li><li data-type='method'><a href="FluxViewport.html#setGeometryJson">setGeometryJson</a></li><li data-type='method'><a href="FluxViewport.html#setSize">setSize</a></li><li data-type='method'><a href="FluxViewport.html#setTessUrl">setTessUrl</a></li><li data-type='method'><a href="FluxViewport.html#setupDefaultLighting">setupDefaultLighting</a></li><li data-type='method'><a href="FluxViewport.html#setView">setView</a></li><li data-type='method'><a href="FluxViewport.html#toJSON">toJSON</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#_deleteFromScene">_deleteFromScene</a></li><li><a href="global.html#_removeGeometries">_removeGeometries</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">FluxRenderContext.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import THREE from 'three';
+
+/**
+* Class to represent a WebGL context which can render for multiple viewports
+* @class  FluxRenderContext
+*/
+export default function FluxRenderContext () {
+    /**
+    * Pointer to the shared THREE.js renderer
+    */
+    try {
+        this._hasWebGL = true;
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            preserveDrawingBuffer: true,
+            alpha: false
+        });
+        this.renderer.autoClear = false;
+        this.renderer.autoClearStencil = false;
+        this.renderer.gammaInput = false;
+        this.renderer.gammaOutput = false;
+        // Allow interactive canvas to overlap other canvas
+        this.renderer.domElement.style.position = "absolute";
+    } catch (err) {
+        // Replace renderer with mock renderer for tests
+        this.renderer = {
+            render: function () {},
+            setSize: function () {},
+            clear: function () {},
+            setViewport: function () {},
+            setClearColor: function () {},
+            getSize: function () { return {width: 100, height: 100}; },
+            getPixelRatio: function () { return 1; },
+            domElement: document.createElement('div')
+        };
+        this._hasWebGL = false;
+    }
+    // Pointer to the three-viewport-renderer instance that is currently being rendered.
+    this.currentHost = null;
+}
+
+/**
+* Maximum number of WebGL contexts allowed.
+* Should be less than or equal to 16, the limit on recent systems.
+*/
+FluxRenderContext.MAX_CONTEXTS = 16;
+
+// List of all render contexts shared globally
+FluxRenderContext.contexts = [];
+
+// Counter so new viewports know which context to create or reuse.
+FluxRenderContext.nextContext = 0;
+
+/**
+* Each viewport uses the next available render context defined by this function
+* @return {FluxRenderContext} The context instance
+*/
+FluxRenderContext.getNextContext = function () {
+    var i = FluxRenderContext.nextContext;
+    FluxRenderContext.nextContext += 1;
+    FluxRenderContext.nextContext = FluxRenderContext.nextContext % FluxRenderContext.MAX_CONTEXTS;
+    return FluxRenderContext.contexts[i];
+};
+
+FluxRenderContext.getNewContext = function () {
+    var context;
+    if (FluxRenderContext.contexts.length >= FluxRenderContext.MAX_CONTEXTS) {
+        context = FluxRenderContext.getNextContext();
+    } else {
+        context = new FluxRenderContext();
+        FluxRenderContext.contexts.push(context);
+    }
+    return context;
+};
+
+FluxRenderContext.prototype.hasWebGL = function() {
+    return this._hasWebGL;
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Aug 05 2016 09:49:19 GMT-0700 (PDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
