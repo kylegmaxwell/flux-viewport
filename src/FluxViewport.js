@@ -12,7 +12,12 @@ import * as FluxJsonToThree from 'flux-json-to-three/src/index.js';
  * viewer to your SDK app. This allows you to interpret Flux json data
  * and render that geometry. You may also create any number of viewports
  * and they will share the finite number of WebGL contexts available
- * from the browser.
+ * from the browser.<br>
+ * Note: If you are using Flux materials that have the parameter roughness
+ * set then you will need to configure your server to have a content security
+ * policy that allows content from https://object-library.storage.googleapis.com
+ * so that our standard texture images can be loaded.
+ * For more information: https://content-security-policy.com
  * @class FluxViewport
  * @param {Element}   domParent     The div container for the canvas
  * @param {Object}    optionalParams Object containing all other parameters
@@ -20,14 +25,12 @@ import * as FluxJsonToThree from 'flux-json-to-three/src/index.js';
  * @param {Number}    optionalParams.height        The height of the canvas
  * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests (overrides projectId) (deprecated)
  * @param {String}    optionalParams.projectId     Id has for a flux project used to make tessellation requests
- * @param {String}    optionalParams.iblUrl        The url to get textures for image based lighting
  * @param {String}    optionalParams.token         The current flux auth token
  */
 export default function FluxViewport (domParent, optionalParams) {
     var width;
     var height;
     var tessUrl;
-    var iblUrl;
     var token;
     if (optionalParams) {
         width = optionalParams.width;
@@ -37,7 +40,6 @@ export default function FluxViewport (domParent, optionalParams) {
         } else if (optionalParams.projectId) {
             tessUrl = _getTessUrl(optionalParams.projectId);
         }
-        iblUrl = optionalParams.iblUrl;
         token = optionalParams.token;
     }
 
@@ -59,7 +61,7 @@ export default function FluxViewport (domParent, optionalParams) {
         throw new Error('domParent must be specified to FluxViewport');
     }
 
-    this._sceneBuilder = new FluxJsonToThree.SceneBuilder(tessUrl, iblUrl, token);
+    this._sceneBuilder = new FluxJsonToThree.SceneBuilder(tessUrl, token);
 
     this._renderer = new FluxRenderer(domParent, renderWidth, renderHeight);
     this._initCallback();

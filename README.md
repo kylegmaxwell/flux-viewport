@@ -1,5 +1,9 @@
 # Flux Viewport
 
+## API Reference Documentation
+https://flux-viewport-reference.herokuapp.com/
+
+## Developers
 Make sure you have node version 4+
 
 npm install
@@ -21,11 +25,11 @@ Extended Developer Setup
 
 To setup gerrit for code review run
 
-# Update remotes
+### Update remotes
 git remote rename origin bitbucket
 git remote add gerrit ssh://${USER}@cr.flux.io:29418/flux-viewport
 
-# Add Commit hook
+### Add Commit hook
 curl https://cr.flux.io/tools/hooks/commit-msg > `git rev-parse --git-dir`/hooks/commit-msg
 chmod +x `git rev-parse --git-dir`/hooks/commit-msg
 
