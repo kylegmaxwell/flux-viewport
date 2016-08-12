@@ -21,6 +21,8 @@ export default function FluxRenderContext () {
         this.renderer.autoClearStencil = false;
         this.renderer.gammaInput = false;
         this.renderer.gammaOutput = false;
+        this.renderer.physicallyCorrectLights = true;
+
         // Allow interactive canvas to overlap other canvas
         this.renderer.domElement.style.position = "absolute";
     } catch (err) {

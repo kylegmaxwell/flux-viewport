@@ -326,17 +326,17 @@ FluxViewport.prototype.setupDefaultLighting = function() {
     //TODO(Kyle) non static lighting
     this._keyLight = new THREE.DirectionalLight();
     this._keyLight.position.set(60, 80, 50);
-    this._keyLight.intensity = 0.95;
+    this._keyLight.intensity = 2.95;
     lighting.add(this._keyLight);
 
     var backLight = new THREE.DirectionalLight();
     backLight.position.set(-250, 50, -200);
-    backLight.intensity = 0.4;
+    backLight.intensity = 1.7;
     lighting.add(backLight);
 
     var fillLight = new THREE.DirectionalLight();
     fillLight.position.set(-500, -500, 0);
-    fillLight.intensity = 0.7;
+    fillLight.intensity = 0.9;
     lighting.add(fillLight);
 
     this._renderer.setLights(lighting);
