@@ -4,7 +4,7 @@ import THREE from 'three';
 import EdgesHelper from './EdgesHelper.js';
 import FluxRenderer from './FluxRenderer.js';
 import FluxCameras from './FluxCameras.js';
-import * as FluxJsonToThree from 'flux-json-to-three/src/index.js';
+import * as FluxJsonToThree from 'flux-json-to-three';
 
 /**
  * UI widget to render 3D geometry.
