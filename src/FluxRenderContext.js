@@ -15,7 +15,7 @@ export default function FluxRenderContext () {
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
             preserveDrawingBuffer: true,
-            alpha: false
+            alpha: true
         });
         this.renderer.autoClear = false;
         this.renderer.autoClearStencil = false;
@@ -32,7 +32,11 @@ export default function FluxRenderContext () {
             setSize: function () {},
             clear: function () {},
             setViewport: function () {},
-            setClearColor: function () {},
+            setClearColor: function (color, alpha) {
+                this.color = color;
+                this.alpha = alpha;
+            },
+            getClearAlpha() { return this.alpha; },
             getSize: function () { return {width: 100, height: 100}; },
             getPixelRatio: function () { return 1; },
             domElement: document.createElement('div')

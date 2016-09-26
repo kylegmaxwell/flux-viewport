@@ -5,7 +5,7 @@
     <title>Flux Multiple Viewports</title>
     <script src="../build/flux-viewport-bundle.global.js"></script>
 </head>
-<body onkeypress="focusAll()">
+<body onkeypress="focusAll()" style="background-color: lightblue;">
     <select id="viewMenu" onchange="setView()">
       <option value="perspective">perspective</option>
       <option value="top">top</option>
@@ -60,13 +60,15 @@
         }
 
         function createFocusTestScene(viewport) {
-          viewport.setupDefaultLighting();
-          viewport.setEdgesMode(FluxViewport.getEdgesModes().FRONT);
-          viewport.setGeometryEntity({"origin":[5,0,0],"primitive":"sphere","radius":1});
+            viewport.setClearColor('black',0.0);
+            viewport.setupDefaultLighting();
+            viewport.setEdgesMode(FluxViewport.getEdgesModes().FRONT);
+            viewport.setGeometryEntity({"origin":[5,0,0],"primitive":"sphere","radius":1});
         }
 
         // creates a scene to test stencilbuffer shadows
         function createShadowTestScene(viewport) {
+          viewport.setHelpersVisible(false);
           viewport.setupDefaultLighting();
           viewport.setGeometryEntity([
               {"origin": [4,6,4],"majorRadius": 4,"minorRadius":1,"axis":[0,0,1],"primitive":"torus"},
@@ -84,7 +86,6 @@
         function createFogTestScene(viewport) {
 
           viewport.setFogDensity(0.005);
-
           viewport.setGeometryEntity([
               {"origin":[-10,0,0],"dimensions":[1,2,3],"axis":[0,0,1],"reference":[0,1,0],"primitive":"block"},
               {"origin":[0,-12,0],"dimensions":[1,2,3],"axis":[0,0,1],"reference":[0,1,0],"primitive":"block"},

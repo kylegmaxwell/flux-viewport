@@ -1,7 +1,7 @@
 'use strict';
 
 import FluxViewport from '../src/FluxViewport.js';
-import viewportState from './viewportState.json'
+import viewportState from './viewportState.json';
 
 // This is a stub
 var domElement = document.createElement();
@@ -16,7 +16,7 @@ export function focusViewport(t) {
         t.fail('Caught an error: '+ errors);
         t.end();
     });
-}; // end it
+}
 
 export function replaceGeom(t) {
     var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10};
@@ -24,7 +24,7 @@ export function replaceGeom(t) {
     var viewport = new FluxViewport(domElement, {width:100,height:100});
     viewport.setGeometryEntity(sphere).then(function () {
         t.ok(viewport._renderer._model, 'Viewport should create a model');
-        viewport.setGeometryEntity(sphere).then(function () {
+        viewport.setGeometryEntity(sphere2).then(function () {
             t.ok(viewport._renderer._model, 'Viewport should create a model');
             t.end();
         }, function (errors) {
@@ -35,7 +35,7 @@ export function replaceGeom(t) {
         t.fail('Caught an error: '+ errors);
         t.end();
     });
-}; // end it
+}
 
 export function viewportToJson(t) {
     var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10};
@@ -51,7 +51,7 @@ export function viewportToJson(t) {
         t.fail('Caught an error: '+ errors);
         t.end();
     });
-}; // end it
+}
 
 export function viewportFromJson(t) {
     var viewport = new FluxViewport(domElement, {width:100,height:100});
@@ -62,7 +62,7 @@ export function viewportFromJson(t) {
         t.fail('Caught an error: '+ errors);
         t.end();
     });
-}; // end it
+}
 
 export function initControls(t) {
     var updated = false;
@@ -79,4 +79,26 @@ export function initControls(t) {
         t.fail('Caught an error: '+ errors);
         t.end();
     });
-};
+}
+
+export function hideHelpers(t) {
+    var viewport = new FluxViewport(domElement, {width:100,height:100});
+    viewport.setHelpersVisible(false);
+    t.equal(viewport._renderer._helpersScene.visible, false, "Should not be visible");
+    t.end();
+}
+
+export function setAlpha(t) {
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10};
+    var viewport = new FluxViewport(domElement, {width:100,height:100});
+    viewport.setGeometryEntity(sphere).then(function () {
+        t.ok(viewport._renderer._model, 'Viewport should create a model');
+        viewport.setClearColor('white', 0.5);
+        viewport.render();
+        t.equal(viewport._renderer._context.renderer.getClearAlpha(), 0.5, "Alpha can be set");
+        t.end();
+    }, function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}

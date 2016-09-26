@@ -172,6 +172,15 @@ FluxViewport.prototype.homeCamera = function() {
 };
 
 /**
+ * Whether to draw helpers (axis and grid)
+ *
+ * @param  {Boolean} visible False to hide them
+ */
+FluxViewport.prototype.setHelpersVisible = function(visible) {
+    this._renderer.setHelpersVisible(visible);
+};
+
+/**
  * Set the viewport geomtery from a JSON string
  * @param {String} dataString The geometry to render formatted as JSON containing Flux entities
  * @return {Object} Promise to resolve after geometry is created
@@ -356,9 +365,10 @@ FluxViewport.prototype.setSize = function(width, height) {
 /**
  * Set the background color of the render canvas
  * @param {THREE.color} color Background color
+ * @param {Number} alpha Opacity
  */
-FluxViewport.prototype.setClearColor = function(color) {
-    this._renderer.setClearColor(color);
+FluxViewport.prototype.setClearColor = function(color, alpha) {
+    this._renderer.setClearColor(color, alpha);
 };
 
 /**

@@ -194,9 +194,20 @@ FluxRenderer.prototype.focus = function() {
 /**
  * Set the clear color (background) for WebGL canvas
  * @param {String|Number} color Hexadecimal or a CSS-style string
+ * @param {Number} alpha Opacity
  */
-FluxRenderer.prototype.setClearColor = function(color) {
+FluxRenderer.prototype.setClearColor = function(color, alpha) {
     this._clearColor = new THREE.Color(color);
+    this._clearAlpha = alpha;
+};
+
+/**
+ * Whether to draw helpers (axis and grid)
+ *
+ * @param  {Boolean} visible False to hide them
+ */
+FluxRenderer.prototype.setHelpersVisible = function(visible) {
+    this._helpersScene.visible = !!visible;
 };
 
 /**
@@ -507,7 +518,7 @@ FluxRenderer.prototype._update = function() {
     this._context.renderer.autoClearColor = this._multipass;
     this._context.renderer.autoClearDepth = this._multipass;
     this._context.renderer.setSize(this._width, this._height);
-    this._context.renderer.setClearColor(this._clearColor);
+    this._context.renderer.setClearColor(this._clearColor, this._clearAlpha);
 };
 
 /**
