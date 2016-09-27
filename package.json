@@ -1,6 +1,6 @@
 {
   "name": "flux-viewport",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.js",
   "jsnext:main": "src/index.js",
@@ -36,7 +36,7 @@
     "flux-fetch": "^0.1.1",
     "ajv": "^4.0.3",
     "eslint": "^3.5.0",
-    "flux-json-to-three": "0.19.0",
+    "flux-json-to-three": "0.20.0",
     "flux-modelingjs": "0.2.0",
     "flux-three-plugins": "0.6.0",
     "jsdoc": "^3.4.0",
