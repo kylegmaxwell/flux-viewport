@@ -5,6 +5,7 @@ import EdgesHelper from './EdgesHelper.js';
 import FluxRenderer from './FluxRenderer.js';
 import FluxCameras from './FluxCameras.js';
 import * as FluxJsonToThree from 'flux-json-to-three';
+import {scene} from 'flux-modelingjs';
 
 /**
  * UI widget to render 3D geometry.
@@ -130,7 +131,7 @@ FluxViewport.getChangeEvent = function () {
  * @return {Boolean}          True for objects/lists containing geometry
  */
 FluxViewport.isKnownGeom = function (entities) {
-    return FluxJsonToThree.isKnownGeom(entities);
+    return scene.isGeometry(entities);
 };
 
 //---- Class member functions
