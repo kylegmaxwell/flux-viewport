@@ -56,7 +56,7 @@ export function viewportToJson(t) {
 export function viewportFromJson(t) {
     var viewport = new FluxViewport(domElement, {width:100,height:100});
     viewport.fromJSON(viewportState).then( function() {
-        t.equal(viewport._entities.primitive, 'torus', 'Should get a torus from JSON');
+        t.equal(viewport._entities.primitive, 'sphere', 'Should get a sphere from JSON');
         t.end();
     }, function (errors) {
         t.fail('Caught an error: '+ errors);

@@ -5,14 +5,13 @@
       0,
       0
     ],
-    "majorRadius": 5,
-    "minorRadius": 3,
+    "radius": 3,
     "axis": [
       0,
       0,
       1
     ],
-    "primitive": "torus"
+    "primitive": "sphere"
   },
   "cameras": {
     "perspective": {

@@ -12,7 +12,7 @@
     <script>
     'use strict';
 
-    var torus = {"origin": [0,0,0],"majorRadius": 5,"minorRadius":3,"axis":[0,0,1],"primitive":"torus"};
+    var sphere = {"origin": [0,0,0],"radius": 5,"primitive":"sphere"};
     var fluxViewport = null;
 
     function handleLoad() {
@@ -20,7 +20,7 @@
 
         fluxViewport.setupDefaultLighting();
 
-        fluxViewport.setGeometryEntity(torus);
+        fluxViewport.setGeometryEntity(sphere);
     }
 
     function focusAll() {

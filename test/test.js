@@ -17,7 +17,6 @@ document.createElement = function() {
 };
 
 var test = require('tape');
-var THREE = require('three');
 var FluxViewport = require('../build/flux-viewport.common.js');
 var tests = require('../build/test.common.js');
 
@@ -30,4 +29,4 @@ test('Create a viewport', function (t) {
 
 for (var testName in tests) {
     test('Viewport test: '+testName, tests[testName]);
-};
+}
