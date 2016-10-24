@@ -21,6 +21,14 @@ export default ({
         replace({
             ENVIRONMENT: 'BROWSER',
             delimiters: [ '${', '}' ]
+        }),
+        // Workaround below is based on this issue.
+        // https://github.com/rollup/rollup/issues/1007
+        // Will not be needed after gl-matrix uses ES6 modules
+        // https://github.com/toji/gl-matrix/pull/209
+        replace({
+          include: '**/gl-matrix/src/gl-matrix/common.js',
+          values: { '\'SIMD\' in this': '\'SIMD\' in window' }
         })
     ]
 });
