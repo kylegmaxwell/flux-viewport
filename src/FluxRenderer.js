@@ -183,11 +183,15 @@ FluxRenderer.prototype.homeCamera = function() {
 /**
 * Focus the controls' current camera on an object.
 * This function will focus on the union of object and all of it's visible children.
-* @param  {THREE.Object3D} object The scene object to focus on.
+* @param  {THREE.Object3D} [obj] The scene object to focus on.
 */
-FluxRenderer.prototype.focus = function() {
-    if (!this._model) return;
-    this._controls.focus(this._model, true);
+FluxRenderer.prototype.focus = function(obj) {
+    if (!this._model && !obj) return;
+    if (obj) {
+        this._controls.focus(obj, true);
+    } else {
+        this._controls.focus(this._model, true);
+    }
     // Changing the controls here triggers a render
 };
 

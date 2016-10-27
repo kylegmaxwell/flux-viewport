@@ -160,9 +160,10 @@ FluxViewport.prototype.render = function() {
 
 /**
  * Focus the camera on the current geometry
+ * @param  {THREE.Object3D}  [obj] Object to focus on
  */
-FluxViewport.prototype.focus = function() {
-    this._renderer.focus();
+FluxViewport.prototype.focus = function(obj) {
+    this._renderer.focus(obj);
 };
 
 /**

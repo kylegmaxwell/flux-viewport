@@ -48,7 +48,7 @@ FluxCameras.prototype.getCamera = function () {
 };
 
 FluxCameras.DEFAULT_POSITIONS = [
-    [2500000, 1000000, 1300000], // perspective
+    [25, 100, 130], // perspective
     [0, 0, -100], // top
     [0, 0, 100], // bottom
     [0, 0, 0], // front
