@@ -1,6 +1,6 @@
 'use strict';
 
-import THREE from 'three';
+import * as THREE from 'three';
 
 // From legacy three.js r72 THREE.ShaderLib.depthRGBA
 var depthRGBA = {

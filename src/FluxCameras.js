@@ -1,6 +1,6 @@
 'use strict';
 
-import THREE from 'three';
+import * as THREE from 'three';
 
 /**
  * Class for managing multiple cameras used in a viewport.

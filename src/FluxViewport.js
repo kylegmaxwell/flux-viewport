@@ -1,6 +1,6 @@
 'use strict';
 
-import THREE from 'three';
+import * as THREE from 'three';
 import EdgesHelper from './EdgesHelper.js';
 import FluxRenderer from './FluxRenderer.js';
 import FluxCameras from './FluxCameras.js';

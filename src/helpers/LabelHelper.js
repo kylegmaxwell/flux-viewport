@@ -2,7 +2,7 @@
  * @author arodic / http://akirodic.com/
  */
 'use strict';
-import THREE from 'three';
+import * as THREE from 'three';
 
 // TODO(aki): allow longer labels. Only one letter currently supported
 

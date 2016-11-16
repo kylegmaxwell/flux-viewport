@@ -6,7 +6,7 @@
  * @author arodic / http://akirodic.com/
  */
 'use strict';
-import THREE from 'three';
+import * as THREE from 'three';
 import LabelHelper from './LabelHelper.js';
 
 export default function AxisHelper ( size, labelSize ) {

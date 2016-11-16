@@ -4,6 +4,9 @@
 global.window = {};
 global.document = {};
 global.self = global;
+global.XMLHttpRequest = function () {
+    this.open = function () {};
+};
 
 document.createElement = function() {
     return {

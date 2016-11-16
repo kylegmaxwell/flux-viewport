@@ -1,6 +1,6 @@
 'use strict';
 
-import THREE from 'three';
+import * as THREE from 'three';
 
 /**
 * Class to represent a WebGL context which can render for multiple viewports
@@ -36,7 +36,7 @@ export default function FluxRenderContext () {
                 this.color = color;
                 this.alpha = alpha;
             },
-            getClearAlpha() { return this.alpha; },
+            getClearAlpha: function() { return this.alpha; },
             getSize: function () { return {width: 100, height: 100}; },
             getPixelRatio: function () { return 1; },
             domElement: document.createElement('div')

@@ -8,13 +8,16 @@ import globals from 'rollup-plugin-node-globals';
 export default ({
     entry: 'src/index.js',
     external: ['three'],
-    globals: ['three:THREE'],
     plugins: [
         builtins(),
-        nodeResolve({ jsnext: true, main: true, browser: true }),
+        nodeResolve({ jsnext: true, module:true }),
         commonjs({
             ignoreGlobal: true,
-            exclude: ['node_modules/rollup-plugin-node-globals/**']
+            exclude: [
+                '**/rollup-plugin-node-globals/**',
+                '**/rollup-plugin-node-builtins/**',
+                '**/three/**'
+            ]
         }),
         globals(),
         json(),
@@ -28,7 +31,11 @@ export default ({
         // https://github.com/toji/gl-matrix/pull/209
         replace({
           include: '**/gl-matrix/src/gl-matrix/common.js',
-          values: { '\'SIMD\' in this': '\'SIMD\' in window' }
+          values: { '\'SIMD\' in this': '\'SIMD\' in global' }
+        }),
+        replace({
+          include: '**/rollup-plugin-node-builtins/**',
+          values: { 'global.location.host ': '(!global.location?global.location:global.location.host) ' }
         })
     ]
 });
