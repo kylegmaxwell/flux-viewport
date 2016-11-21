@@ -67,11 +67,12 @@ viewer to your SDK app. This allows you to interpret Flux json data
 and render that geometry. You may also create any number of viewports
 and they will share the finite number of WebGL contexts available
 from the browser.<br>
-Note: If you are using Flux materials that have the parameter roughness
-set then you will need to configure your server to have a content security
-policy that allows content from https://object-library.storage.googleapis.com
-so that our standard texture images can be loaded.
-For more information: https://content-security-policy.com
+The most commonly used functions are <a href="#setGeometryEntity">setGeometryEntity</a> (to set geometry to render)
+and <a href="#.isKnownGeom">isKnownGeom</a> (determine if JSON is geometry) so you might want to start reading there. <br>
+Note: If you are using <a href="https://community.flux.io/content/kbentry/2718/materials-1.html">Flux materials</a> that have the parameter roughness
+set then you will need to configure your server to have a <a href="https://content-security-policy.com">content security
+policy</a> that allows content from https://object-library.storage.googleapis.com
+so that our environment texture images can be loaded.
 </div>
 
 
@@ -234,7 +235,7 @@ For more information: https://content-security-policy.com
 
             
 
-            <td class="description last">The url for making brep tessellation requests (overrides projectId) (deprecated)</td>
+            <td class="description last">The url for making brep tessellation requests (overrides projectId) (Used when server is not flux.io)</td>
         </tr>
 
     
@@ -257,7 +258,7 @@ For more information: https://content-security-policy.com
 
             
 
-            <td class="description last">Id has for a flux project used to make tessellation requests</td>
+            <td class="description last">Id of a flux project (required to render breps)</td>
         </tr>
 
     
@@ -280,7 +281,7 @@ For more information: https://content-security-policy.com
 
             
 
-            <td class="description last">The current flux auth token</td>
+            <td class="description last">The current flux auth token (required to render breps)</td>
         </tr>
 
     
@@ -432,7 +433,7 @@ fluxViewport.addEventListener(FluxViewport.getChangeEvent(), function() {});
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line124">line 124</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -537,7 +538,7 @@ Options are NONE, FRONT, BACK, BOTH</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line112">line 112</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -642,7 +643,7 @@ Allows you to change the view to perspective, top, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line390">line 390</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line393">line 393</a>
     </li></ul></dd>
     
 
@@ -798,7 +799,7 @@ Allows you to change the view to perspective, top, etc.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line133">line 133</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -903,7 +904,7 @@ Warning: This is an experimental feature that may not work.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line447">line 447</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line450">line 450</a>
     </li></ul></dd>
     
 
@@ -1035,7 +1036,7 @@ Used for QA testing.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line297">line 297</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line300">line 300</a>
     </li></ul></dd>
     
 
@@ -1178,7 +1179,7 @@ Used for QA testing.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line165">line 165</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line166">line 166</a>
     </li></ul></dd>
     
 
@@ -1310,7 +1311,7 @@ Warning this is async when it sets entities
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line265">line 265</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line268">line 268</a>
     </li></ul></dd>
     
 
@@ -1414,7 +1415,7 @@ Warning this is async when it sets entities
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line423">line 423</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line426">line 426</a>
     </li></ul></dd>
     
 
@@ -1518,7 +1519,7 @@ Warning this is async when it sets entities
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line439">line 439</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line442">line 442</a>
     </li></ul></dd>
     
 
@@ -1622,7 +1623,7 @@ Warning this is async when it sets entities
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line172">line 172</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line173">line 173</a>
     </li></ul></dd>
     
 
@@ -1706,7 +1707,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line157">line 157</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line158">line 158</a>
     </li></ul></dd>
     
 
@@ -1837,7 +1838,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line415">line 415</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line418">line 418</a>
     </li></ul></dd>
     
 
@@ -1991,7 +1992,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line372">line 372</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line375">line 375</a>
     </li></ul></dd>
     
 
@@ -2122,7 +2123,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line431">line 431</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line434">line 434</a>
     </li></ul></dd>
     
 
@@ -2253,7 +2254,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line398">line 398</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line401">line 401</a>
     </li></ul></dd>
     
 
@@ -2291,7 +2292,9 @@ You may call it on demand as needed when changing properties.
 
 
 <div class="description">
-    Set the viewport geometry from a data object containing Flux entities
+    Set the viewport geometry from a data object containing Flux entities.
+See documentation for more explanation of <a href="https://community.flux.io/content/kbentry/2579/geometric-primitives.html">entities</a>
+and <a href="https://community.flux.io/content/kbentry/3087/what-is-a-scene.html">scene primitives</a>
 </div>
 
 
@@ -2384,7 +2387,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line200">line 200</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -2537,7 +2540,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line190">line 190</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line191">line 191</a>
     </li></ul></dd>
     
 
@@ -2690,7 +2693,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line181">line 181</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line182">line 182</a>
     </li></ul></dd>
     
 
@@ -2844,7 +2847,7 @@ You may call it on demand as needed when changing properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line363">line 363</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line366">line 366</a>
     </li></ul></dd>
     
 
@@ -2976,7 +2979,7 @@ This can be used to replace the value if you did not set it on the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line407">line 407</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line410">line 410</a>
     </li></ul></dd>
     
 
@@ -3058,7 +3061,7 @@ This can be used to replace the value if you did not set it on the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line333">line 333</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line336">line 336</a>
     </li></ul></dd>
     
 
@@ -3189,7 +3192,7 @@ This can be used to replace the value if you did not set it on the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line380">line 380</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line383">line 383</a>
     </li></ul></dd>
     
 
@@ -3271,7 +3274,7 @@ This can be used to replace the value if you did not set it on the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line250">line 250</a>
+        <a href="FluxViewport.js.html">FluxViewport.js</a>, <a href="FluxViewport.js.html#line253">line 253</a>
     </li></ul></dd>
     
 
@@ -3337,7 +3340,7 @@ This can be used to replace the value if you did not set it on the constructor.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Thu Oct 27 2016 15:17:34 GMT-0700 (PDT) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Nov 22 2016 08:58:43 GMT-0800 (PST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

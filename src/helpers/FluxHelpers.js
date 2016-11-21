@@ -15,7 +15,7 @@ export default function FluxHelpers() {
     THREE.Object3D.call( this );
     this.type = 'FluxHelpers';
 
-    this._grid = this._setupGrid(10, 10, 0x111111, 0xaaaaaa);
+    this._grid = this._setupGrid(20, 200, 0x111111, 0xaaaaaa);
     this.setView(FluxCameras.VIEWS.perspective);
     this.add(this._grid);
 
@@ -29,14 +29,15 @@ FluxHelpers.prototype.constructor = FluxHelpers;
 /**
  * Create a grid of lines to give the user a sense of scale.
  * This is also referred to as a construction plane.
- * @param  {Number} size   Size of grid spacing
- * @param  {Number} width  Width of grid spacing
+ * @param  {Number} cellWidth  Length of a single cell
+ * @param  {Number} gridWidth  Length of the entire grid
  * @param  {Number|String} color1 Color specification for primary grid color
  * @param  {Number|String} color2 Color specification for secondary grid color
  * @return {Object3D}        The grid object
  */
-FluxHelpers.prototype._setupGrid = function(size, width, color1, color2) {
-    var grid = new THREE.GridHelper(size * width, size, new THREE.Color(color1), new THREE.Color(color2));
+FluxHelpers.prototype._setupGrid = function(cellWidth, gridWidth, color1, color2) {
+    // Three.js parameters are: size of half the entire grid, number of divisions in the grid
+    var grid = new THREE.GridHelper(gridWidth * 0.5, gridWidth / cellWidth, new THREE.Color(color1), new THREE.Color(color2));
     grid.material.transparent = true;
     grid.material.opacity = 0.5;
     grid.material.depthWrite = false;

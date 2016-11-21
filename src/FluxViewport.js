@@ -14,19 +14,20 @@ import {scene} from 'flux-modelingjs';
  * and render that geometry. You may also create any number of viewports
  * and they will share the finite number of WebGL contexts available
  * from the browser.<br>
- * Note: If you are using Flux materials that have the parameter roughness
- * set then you will need to configure your server to have a content security
- * policy that allows content from https://object-library.storage.googleapis.com
- * so that our standard texture images can be loaded.
- * For more information: https://content-security-policy.com
+ * The most commonly used functions are <a href="#setGeometryEntity">setGeometryEntity</a> (to set geometry to render)
+ * and <a href="#.isKnownGeom">isKnownGeom</a> (determine if JSON is geometry) so you might want to start reading there. <br>
+ * Note: If you are using <a href="https://community.flux.io/content/kbentry/2718/materials-1.html">Flux materials</a> that have the parameter roughness
+ * set then you will need to configure your server to have a <a href="https://content-security-policy.com">content security
+ * policy</a> that allows content from https://object-library.storage.googleapis.com
+ * so that our environment texture images can be loaded.
  * @class FluxViewport
  * @param {Element}   domParent     The div container for the canvas
  * @param {Object}    optionalParams Object containing all other parameters
  * @param {Number}    optionalParams.width         The width of the canvas
  * @param {Number}    optionalParams.height        The height of the canvas
- * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests (overrides projectId) (deprecated)
- * @param {String}    optionalParams.projectId     Id has for a flux project used to make tessellation requests
- * @param {String}    optionalParams.token         The current flux auth token
+ * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests (overrides projectId) (Used when server is not flux.io)
+ * @param {String}    optionalParams.projectId     Id of a flux project (required to render breps)
+ * @param {String}    optionalParams.token         The current flux auth token (required to render breps)
  */
 export default function FluxViewport (domParent, optionalParams) {
     var width;
@@ -193,7 +194,9 @@ FluxViewport.prototype.setGeometryJson = function(dataString) {
 };
 
 /**
- * Set the viewport geometry from a data object containing Flux entities
+ * Set the viewport geometry from a data object containing Flux entities.
+ * See documentation for more explanation of <a href="https://community.flux.io/content/kbentry/2579/geometric-primitives.html">entities</a>
+ * and <a href="https://community.flux.io/content/kbentry/3087/what-is-a-scene.html">scene primitives</a>
  * @param {Object} data The geometry entities to render
  * @return {Object} Promise to resolve after geometry is created
  */
