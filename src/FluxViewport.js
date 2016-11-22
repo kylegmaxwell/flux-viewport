@@ -6,6 +6,7 @@ import FluxRenderer from './FluxRenderer.js';
 import FluxCameras from './FluxCameras.js';
 import * as FluxJsonToThree from 'flux-json-to-three';
 import {scene} from 'flux-modelingjs';
+import * as constants from './controls/constants.js';
 
 /**
  * UI widget to render 3D geometry.
@@ -26,6 +27,7 @@ import {scene} from 'flux-modelingjs';
  * @param {Number}    optionalParams.width         The width of the canvas
  * @param {Number}    optionalParams.height        The height of the canvas
  * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests (overrides projectId) (Used when server is not flux.io)
+ * @param {Enumeration}    optionalParams.selection       Whether to enable user selection
  * @param {String}    optionalParams.projectId     Id of a flux project (required to render breps)
  * @param {String}    optionalParams.token         The current flux auth token (required to render breps)
  */
@@ -34,6 +36,7 @@ export default function FluxViewport (domParent, optionalParams) {
     var height;
     var tessUrl;
     var token;
+    var selection = constants.Selection.NONE;
     if (optionalParams) {
         width = optionalParams.width;
         height = optionalParams.height;
@@ -43,6 +46,9 @@ export default function FluxViewport (domParent, optionalParams) {
             tessUrl = _getTessUrl(optionalParams.projectId);
         }
         token = optionalParams.token;
+        if (optionalParams.selection) {
+            selection = optionalParams.selection;
+        }
     }
 
     var renderWidth = 100;//px
@@ -64,8 +70,10 @@ export default function FluxViewport (domParent, optionalParams) {
     }
 
     this._sceneBuilder = new FluxJsonToThree.SceneBuilder(tessUrl, token);
+    // Only allow merging when selection is disabled
+    this._sceneBuilder.setAllowMerge(constants.Selection.NONE === selection);
 
-    this._renderer = new FluxRenderer(domParent, renderWidth, renderHeight);
+    this._renderer = new FluxRenderer(domParent, renderWidth, renderHeight, selection);
     this._initCallback();
 
     // Make sure to render on mouse over in case the renderer has swapped contexts
@@ -115,6 +123,16 @@ FluxViewport.getEdgesModes = function () {
 };
 
 /**
+ * @summary Enumeration of selection modes.
+ * This determines when selection events occur in response to mouse events.
+ * Options are NONE, CLICK, HOVER
+ * @return {Object} enumeration
+ */
+FluxViewport.getSelectionModes = function () {
+   return constants.Selection;
+};
+
+/**
  * Name of the event fired when the camera changes
  *
  * This can be used to observe those changes and register a callback.<br>
@@ -123,7 +141,18 @@ FluxViewport.getEdgesModes = function () {
  * @return {String} Event name
  */
 FluxViewport.getChangeEvent = function () {
-    return FluxRenderer.CHANGE_EVENT;
+    return constants.Events.CHANGE;
+};
+
+/**
+ * Enumeration of different event types
+ * This can be used to differentiate events in the EventListener.
+ * fluxViewport.addEventListener(FluxViewport.getChangeEvent(), function(e) {
+ * FluxViewport.getEvents().SELECT === e.event;});
+ * @return {Object} Enumeration object
+ */
+FluxViewport.getEvents = function () {
+    return constants.Events;
 };
 
 /**
@@ -143,10 +172,76 @@ FluxViewport.isKnownGeom = function (entities) {
  */
 FluxViewport.prototype._initCallback = function() {
     var _this = this;
-    this._renderer.addEventListener(FluxRenderer.CHANGE_EVENT, function(event) {
-        _this.dispatchEvent( event );
+    this._renderer.addEventListener(constants.Events.CHANGE, function(event) {
+        _this.dispatchEvent(event);
         _this.render();
     });
+};
+
+/**
+ * Add a new plugin for user interaction controls.
+ * See ViewportControls.js for more information.
+ * @param  {ViewportControls} CustomControls A constructor that implements the controls interface.
+ * @return {CustomControls}                The new instance
+ */
+FluxViewport.prototype.addControls = function(CustomControls) {
+    return this._renderer.addControls(CustomControls);
+};
+
+
+/**
+ * Get an object that maps from id string to Three.Object3D in the current scene
+ * @return {Object}  Id to object scene map
+ */
+FluxViewport.prototype.getObjectMap = function() {
+    return this._latestSceneResults.getObjectMap();
+};
+
+/**
+ * Get the currently selected geometry as a list of id strings
+ * @return {Array.<String>}  Current selection
+ */
+FluxViewport.prototype.getSelection = function() {
+    var selectionMap = this._renderer.getSelection();
+    var keys = Object.keys(selectionMap);
+    var selection = [];
+    for (var i=0;i<keys.length;i++) {
+        var obj = selectionMap[keys[i]];
+        if (obj != null) {
+            selection.push(obj.userData.id);
+        }
+    }
+    return selection;
+};
+
+/**
+ * Define the material that is applied on selected objects
+ * @param  {Object} data Flux json description of a material
+ */
+FluxViewport.prototype.setSelectionMaterial = function(data) {
+    this._renderer.setSelectionMaterial(data);
+};
+
+/**
+ * Set the currently selected geometry
+ * @param {Array.<String>}  ids New selection
+ */
+FluxViewport.prototype.setSelection = function(ids) {
+    if (ids == null || ids.constructor !== Array) return;
+    var map = this._latestSceneResults.getObjectMap();
+    var objects = ids.map(function (id) { return map[id];});
+    this._renderer.setSelection(objects);
+};
+
+/**
+ * Get the JSON representation of the objects with the given ids
+ * @param  {Array.<String>} ids List of object ids
+ * @return {Array.<Object>}     List of Flux JSON objects
+ */
+FluxViewport.prototype.getJson = function(ids) {
+    if (ids == null || ids.constructor !== Array) return [];
+    var map = this._latestSceneResults.getObjectMap();
+    return ids.map(function (id) { return map[id].userData.data;});
 };
 
 /**

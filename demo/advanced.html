@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Flux Multiple Viewports</title>
-    <script src="../build/flux-viewport-bundle.global.min.js"></script>
+    <script src="../build/flux-viewport-bundle.global.js"></script>
 </head>
 <body onkeypress="focusAll()" style="background-color: lightblue;">
     <select id="viewMenu" onchange="setView()">
@@ -38,7 +38,7 @@
         viewports[1].render();
 
         var third = document.querySelector("#third");
-        viewports[2] = new FluxViewport(third);
+        viewports[2] = new FluxViewport(third, {selection: FluxViewport.getSelectionModes().CLICK});
         createShadowTestScene(viewports[2]);
 
         var fourth = document.querySelector("#fourth");
@@ -67,18 +67,25 @@
         }
 
         // creates a scene to test stencilbuffer shadows
+        // also tests selection
         function createShadowTestScene(viewport) {
           viewport.setHelpersVisible(false);
           viewport.setupDefaultLighting();
           viewport.setGeometryEntity([
-              {"origin": [4,6,4],"radius": 4,"primitive":"sphere"},
-              {"origin": [-4,4,4],"radius": 4,"primitive":"sphere"},
+              {"origin": [4,6,4],"radius": 4,"primitive":"sphere","id":"A"},
+              {"origin": [-4,4,4],"radius": 4,"primitive":"sphere","id":"B"},
               {"origin": [0,0,2],"radius": 4,"primitive":"sphere"},
               {"vertices": [[-20,0,0],[0,20,0],[20,0,0],[0,-20,0]],"faces":[[0,3,1],[1,3,2]],"primitive":"mesh"}])
-          .then(function () {
-            viewport.activateShadows();
-            viewport.focus(); // updates controls and causes a render
-            viewport.render(); // Render again due to some bug in shadows
+          .then(function (result) {
+              viewport.setSelection(result.getObject().children[0]);
+              viewport.activateShadows();
+              viewport.focus(); // updates controls and causes a render
+              viewport.render(); // Render again due to some bug in shadows
+          });
+          viewport.addEventListener(FluxViewport.getEvents().CHANGE, function (event) {
+              if (event.event === FluxViewport.getEvents().SELECT) {
+                  console.log("SELECT", event.selection);
+              }
           });
         }
 

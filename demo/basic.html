@@ -16,7 +16,7 @@
     var fluxViewport = null;
 
     function handleLoad() {
-        fluxViewport = new FluxViewport(container);
+        fluxViewport = new FluxViewport(document.querySelector('#container'));
 
         fluxViewport.setupDefaultLighting();
 

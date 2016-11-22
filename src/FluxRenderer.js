@@ -5,8 +5,11 @@ import EdgesHelper from './EdgesHelper.js';
 import FluxCameras from './FluxCameras.js';
 import FluxHelpers from './helpers/FluxHelpers.js';
 import FluxRenderContext from './FluxRenderContext.js';
+import FluxEditorControls from './controls/FluxEditorControls.js';
+import SelectionControls from './controls/SelectionControls.js';
 import * as FluxThreePlugins from 'flux-three-plugins/src/index.js';
 import * as shaders from './shaders.js';
+import * as constants from './controls/constants.js';
 
 /**
  * Class wrapping the renderer with custom passes and context swapping.
@@ -17,8 +20,9 @@ import * as shaders from './shaders.js';
  * @param {Element} domParent The div container for the canvas
  * @param {Number} width     The width of the canvas
  * @param {Number} height    The height of the canvas
+ * @param {Enumeration} selection Whether to enable user selection
  */
-export default function FluxRenderer(domParent, width, height) {
+export default function FluxRenderer(domParent, width, height, selection) {
     this.id = FluxRenderer.nextId++;
 
     // Dom element that wraps the canvas
@@ -59,12 +63,19 @@ export default function FluxRenderer(domParent, width, height) {
     this._helpersScene = new THREE.Scene();
     this._helpersScene.add(this._helpers);
 
-    // Camera to be rendered with.Any instance of `THREE.Camera` can be set here.
-    this._initControls();
-
     // Scene containing geometry to be rendered in this viewport THREE.Scene
     this._scene = new THREE.Scene();
-    // this._scene.add(this._helpers);
+
+    this._controls = [];
+    // Camera to be rendered with.Any instance of `THREE.Camera` can be set here.
+    var _this = this;
+    this._editorControls = this.addControls(FluxEditorControls);
+    this._editorControls.addEventListener(constants.Events.CHANGE, function(event) {
+        _this._cameras.updateCamera(_this._width, _this._height);
+        _this.dispatchEvent(event);
+    });
+    this._selectionControls = this.addControls(SelectionControls);
+    this._selectionControls.setMode(selection);
 
     // Fog object for this viewport constructed from color and density
     this._fog = new THREE.FogExp2( this._clearColor, 0.0 );
@@ -91,12 +102,6 @@ FluxRenderer.prototype.constructor = FluxRenderer;
 
 // Used for debugging issues with _setHost
 FluxRenderer.nextId = 0;
-
-/**
- * Name of the event fired when the camera changes
- * @type {String}
- */
-FluxRenderer.CHANGE_EVENT = 'change';
 
 /**
  * Set the lights used to illuminate the scene.
@@ -132,6 +137,46 @@ function _deleteFromScene(scene, model) {
 }
 
 /**
+ * Add a new plugin for user interaction controls.
+ * See ViewportControls.js for more information.
+ * @param  {ViewportControls} CustomControls A constructor that implements the controls interface.
+ * @return {CustomControls}                The new instance
+ */
+FluxRenderer.prototype.addControls = function(CustomControls) {
+    var customControls = new CustomControls(this._cameras.getCamera(), this._scene, this._domParent, this._width, this._height);
+    var _this = this;
+    customControls.addEventListener(constants.Events.CHANGE, function (event) {
+        _this.dispatchEvent(event);
+    });
+    this._controls.push(customControls);
+    return customControls;
+};
+
+/**
+ * Define the material that is applied on selected objects
+ * @param  {Object} data Flux json description of a material
+ */
+FluxRenderer.prototype.setSelectionMaterial = function(data) {
+    this._selectionControls.setMaterial(data);
+};
+
+/**
+ * Get the currently selected geometry
+ * @return {THREE.Object3D}  Current selection
+ */
+FluxRenderer.prototype.getSelection = function() {
+    return this._selectionControls.getSelection();
+};
+
+/**
+ * set the currently selected geometry
+ * @param {THREE.Object3D}  object New selection
+ */
+FluxRenderer.prototype.setSelection = function(object) {
+    this._selectionControls.setSelection(object);
+};
+
+/**
  * Set the object to render
  * Replaces old render contents
  * @param {THREE.Object3D} model What to render
@@ -159,25 +204,10 @@ FluxRenderer.prototype.setEdgesMode = function(mode) {
 };
 
 /**
- * When the camera controls change make sure to update the camera
- * @private
- */
-FluxRenderer.prototype._initControls = function() {
-    if (this._controls) this._controls.enabled = false;
-    //TODO(Kyle): rewrite EditorControls to allow camera to be changed
-    this._controls = new FluxThreePlugins.EditorControls(this._cameras.getCamera(), this._domParent);
-    var _this = this;
-    this._controls.addEventListener(FluxRenderer.CHANGE_EVENT, function(event) {
-        _this._cameras.updateCamera(_this._width, _this._height);
-        _this.dispatchEvent( event );
-    });
-};
-
-/**
  * Restore the camera to a default location
  */
 FluxRenderer.prototype.homeCamera = function() {
-    this._controls.focus(this._helpers, true);
+    this._editorControls.focus(this._helpers);
 };
 
 /**
@@ -188,9 +218,14 @@ FluxRenderer.prototype.homeCamera = function() {
 FluxRenderer.prototype.focus = function(obj) {
     if (!this._model && !obj) return;
     if (obj) {
-        this._controls.focus(obj, true);
+        this._editorControls.focus(obj);
     } else {
-        this._controls.focus(this._model, true);
+        var selection = this._selectionControls.getSelectionSphere();
+        if (selection) {
+            this._editorControls.focus(selection);
+        } else {
+            this._editorControls.focus(this._model);
+        }
     }
     // Changing the controls here triggers a render
 };
@@ -252,7 +287,10 @@ FluxRenderer.prototype.detach = function() {
 FluxRenderer.prototype.setView = function(view) {
     this._cameras.setView(view);
     this._cameras.updateCamera(this._width, this._height);
-    this._initControls();
+    // Update the camera for each controls object
+    for (var i=0;i<this._controls.length;i++) {
+        this._controls[i].setCamera(this._cameras.getCamera());
+    }
     this._helpers.setView(view);
 
     if (!this._renderPasses) return;
@@ -539,6 +577,10 @@ FluxRenderer.prototype.setSize = function(width, height) {
 
     this._composer.setSize(this._width, this._height);
 
+    for (var i=0;i<this._controls.length;i++) {
+        this._controls[i].setSize(this._width, this._height);
+    }
+
     this._cacheCanvas.height = height;
     this._cacheCanvas.width = width;
 };
@@ -550,8 +592,9 @@ FluxRenderer.prototype.setSize = function(width, height) {
 FluxRenderer.prototype.toJSON = function() {
     var serializableState = {
         cameras: this._cameras.toJSON(), // camera pos and view
-        controls: this._controls.toJSON() // center point
+        controls: this._editorControls.toJSON() // center point
     };
+    //TODO(Kyle): Transition to serializing all controls objets
     return serializableState;
 };
 
@@ -566,6 +609,7 @@ FluxRenderer.prototype.fromJSON = function(state) {
         this._cameras.fromJSON(state.cameras);
     }
     if (state.controls) {
-        this._controls.fromJSON(state.controls);
+        //TODO(Kyle): Transition to deserializing all controls objets
+        this._editorControls.fromJSON(state.controls);
     }
 };

@@ -102,3 +102,18 @@ export function setAlpha(t) {
         t.end();
     });
 }
+
+export function viewportSelection(t) {
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10,"id":"mySphere"};
+    var viewport = new FluxViewport(domElement, {width:100,height:100,
+        selection: FluxViewport.getSelectionModes().HOVER});
+    viewport.setGeometryEntity(sphere).then(function () {
+        t.equal(viewport.getSelection().length,0,"Selection starts empty");
+        viewport.setSelection(['mySphere']);
+        t.deepEqual(viewport.getSelection(),['mySphere'],"Selection has id");
+        t.end();
+    }).catch(function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}

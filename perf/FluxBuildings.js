@@ -1,4 +1,6 @@
 'use strict';
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 
 function FluxBuildings() {
     // Whether a time trial is currently running.
@@ -24,12 +26,13 @@ FluxBuildings.urls = [
     "https://storage.googleapis.com/object-library/sphereBig.json",
     "https://storage.googleapis.com/object-library/sphereSmall.json",
     "https://storage.googleapis.com/object-library/spheres.json",
-    "https://storage.googleapis.com/object-library/buildingsMed.json",
-    "https://storage.googleapis.com/object-library/buildingsBig.json"
+    "https://storage.googleapis.com/object-library/buildingsMedMesh.json",
+    "https://storage.googleapis.com/object-library/buildingsBigMesh.json"
 ];
 
 /**
 * Grab a model from flux-viewport-models and convert it to three.js runtime.
+* @param  {String} url The location to load from
 */
 FluxBuildings.prototype.loadModel = function (url) {
     console.log("Loading model",url);
@@ -39,12 +42,13 @@ FluxBuildings.prototype.loadModel = function (url) {
         fluxViewport.setGeometryEntity(result).then(function (result) {
             fluxViewport.focus();
             _this._perf.end('Load model');
-            if (result.meshIsEmpty()) {
+            if (result.isEmpty()) {
                 console.warn(result.primStatus.invalidKeySummary());
             }
             _this.countGeometry();
             _this.printMemory();
-        }).catch(function () {
+        }).catch(function (err) {
+            console.log(err);
         });
     }.bind(this));
 };
@@ -104,11 +108,11 @@ FluxBuildings.prototype.countTriangles = function (objectRoot) {
     objectRoot.traverse( function (element) {
         if (element.type === "Mesh" && element.visible===true) {
             if (element.geometry instanceof THREE.BufferGeometry) {
-                vertCount += element.geometry.attributes.position.length;
+                vertCount += element.geometry.attributes.position.count;
                 if (element.geometry.attributes.index) {
-                    faceCount += element.geometry.attributes.index.length/3;
+                    faceCount += element.geometry.attributes.index.count/3;
                 } else { // default is one face per three points
-                    faceCount += element.geometry.attributes.position.length/3;
+                    faceCount += element.geometry.attributes.position.count/3;
                 }
             }
             else { // regular (non buffer) geometry
@@ -124,7 +128,6 @@ FluxBuildings.prototype.countTriangles = function (objectRoot) {
 /**
 * Compute the bounding box of the object, including all of it's children.
 * @param  {THREE.Object3D} objectRoot The object to size up.
-* @return {Bounding Box}        List of two THREE.Vector3's showing max min
 */
 FluxBuildings.prototype.computeBoundingBox = function (objectRoot) {
 
@@ -132,7 +135,6 @@ FluxBuildings.prototype.computeBoundingBox = function (objectRoot) {
     var bbMin = new THREE.Vector3(Infinity, Infinity, Infinity);
     var tmp = new THREE.Vector3(0,0,0);
 
-    var elementIndex = 0;
     var foundBufferGeometry = false;
     var foundRegularGeometry = false;
     objectRoot.traverse( function (element) {
@@ -167,7 +169,6 @@ FluxBuildings.prototype.computeBoundingBox = function (objectRoot) {
             }
 
         }
-        elementIndex++;
     });
     if (foundBufferGeometry) {
         console.log("Found buffer geometry");
@@ -203,7 +204,6 @@ FluxBuildings.prototype.requestModel = function (url, callback) {
 /**
 * Print the amount of memory used by Chrome
 * Requires --enable-precise-memory-info when launching Chrome to get around security barrier.
-* @return {[type]} [description]
 */
 FluxBuildings.prototype.printMemory = function () {
     if (window.performance && window.performance.memory) {
@@ -215,7 +215,6 @@ FluxBuildings.prototype.printMemory = function () {
 
 /**
 * Render a certain number of times and output
-* @return {[type]} [description]
 */
 FluxBuildings.prototype._testRender = function () {
     // Trial run a few renders

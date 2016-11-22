@@ -15,11 +15,12 @@ document.createElement = function() {
         style: {position: ''},
         appendChild: function () {},
         getContext: function () {},
-        addEventListener: function () {}
+        addEventListener: function () {},
+        removeEventListener: function () {}
     };
 };
 
-var test = require('tape');
+var test = require('tape-catch');
 var FluxViewport = require('../build/flux-viewport.common.js');
 var tests = require('../build/test.common.js');
 

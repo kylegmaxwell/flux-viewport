@@ -7,7 +7,7 @@ export function initCameras(t) {
     t.equal(cameras._view, FluxCameras.VIEWS.perspective, 'Default view should be perspective');
     t.ok(cameras.getCamera(), 'Camera should be set');
     t.end();
-}; // end it
+} // end it
 
 
 export function serializeCameras(t) {
@@ -23,4 +23,4 @@ export function serializeCameras(t) {
     cameras.fromJSON(cameraStates);
     t.equal(cameras._perspCamera.position.x, 5, 'Deserialize should set values on cameras');
     t.end();
-}; // end it
+} // end it
