@@ -1,7 +1,13 @@
 # Flux Viewport
 
+## Tutorial
+The [git book](https://flux.gitbooks.io/flux-javascript-sdk/content/) documenting the Flux JavaScript SDK, has a good introduction to using the [Flux Viewport](https://flux.gitbooks.io/flux-javascript-sdk/content/tutorial/Chapter-2.html).
+
+## Sample Project
+Several projects in [Flux Labs](https://github.com/flux-labs) use the Flux Viewport. If you want a simple one try the [Flux Seed](https://github.com/flux-labs/flux-seed) starter project.
+
 ## API Reference Documentation
-https://flux-viewport-reference.herokuapp.com/
+For a complete list of functions see the [API Reference](https://flux-viewport-reference.herokuapp.com)
 
 ## Developers
 Make sure you have node version 4+
@@ -23,6 +29,8 @@ http://localhost:8001/qa/
 
 ### Extended Developer Setup
 
+If you want to contribute changes to the viewport code base please email support@flux.io and introduce yourself.
+
 To setup gerrit for code review run the following commands.
 ```
 # Update remotes
@@ -33,5 +41,5 @@ git remote add gerrit ssh://${USER}@cr.flux.io:29418/flux-viewport
 curl https://cr.flux.io/tools/hooks/commit-msg > `git rev-parse --git-dir`/hooks/commit-msg
 chmod +x `git rev-parse --git-dir`/hooks/commit-msg
 ```
-If you are working in Flux genie follow the instructions here:
+If you are working in Flux genie follow the instructions here (Flux Employees Only):
 https://docs.google.com/document/d/1qf6PGJN54buSGFcrcRCZnruY4yTAsNRzoMtEpyE2VFY/edit#heading=h.owqmh4p4ruch
