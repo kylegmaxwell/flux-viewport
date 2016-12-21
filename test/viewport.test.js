@@ -117,3 +117,38 @@ export function viewportSelection(t) {
         t.end();
     });
 }
+
+export function viewportShadows(t) {
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10,"id":"mySphere"};
+    var sphere2 = {"origin":[100,0,0],"primitive":"sphere","radius":10,"id":"mySphere"};
+    var viewport = new FluxViewport(domElement);
+    viewport.setupDefaultLighting();
+    var left = [];
+    viewport.setGeometryEntity(sphere).then(function () {
+        var lights = viewport._renderer._scene.children[0].children;
+        for (var i=0;i<lights.length;i++) {
+            var light = lights[i];
+            if (light.type === 'DirectionalLight') {
+                left[i] = light.shadow.camera.left;
+                t.ok(light.shadow.camera.right > light.shadow.camera.left, 'Frustum has positive width');
+            }
+        }
+        t.equal(viewport._renderer._context.renderer.shadowMap.enabled, false, 'Shadow default is off');
+        viewport.activateShadows();
+        t.equal(viewport._renderer._context.renderer.shadowMap.enabled, true, 'Shadow turned on');
+        viewport.setGeometryEntity(sphere2).then(function () {
+            var lights = viewport._renderer._scene.children[0].children;
+            for (var i=0;i<lights.length;i++) {
+                var light = lights[i];
+                if (light.type === 'DirectionalLight') {
+                    t.ok(Math.abs(light.shadow.camera.left)>Math.abs(left[i]),
+                        'Frustum is larger for distant geom');
+                }
+            }
+        });
+        t.end();
+    }).catch(function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}

@@ -39,6 +39,7 @@ export default function FluxRenderContext () {
             getClearAlpha: function() { return this.alpha; },
             getSize: function () { return {width: 100, height: 100}; },
             getPixelRatio: function () { return 1; },
+            shadowMap: { enabled: false },
             domElement: document.createElement('div')
         };
         this._hasWebGL = false;
