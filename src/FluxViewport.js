@@ -7,6 +7,7 @@ import FluxCameras from './FluxCameras.js';
 import * as FluxJsonToThree from 'flux-json-to-three';
 import {scene} from 'flux-modelingjs';
 import * as constants from './controls/constants.js';
+import * as print from './utils/debugPrint.js';
 
 /**
  * UI widget to render 3D geometry.
@@ -539,12 +540,9 @@ FluxViewport.prototype.getGlCanvas = function() {
 };
 
 /**
- * Turn on shadow rendering.
- * Warning: This is an experimental feature that may not work.
+ * Turn on shadow rendering (not implemented)
  */
 FluxViewport.prototype.activateShadows = function() {
-    if (!this._keyLight) return;
-
-    this._renderer.setShadowLight(this._keyLight);
-    this._renderer.addShadows();
+    print.warn('Shadows are not implemented yet');
+    // https://vannevar.atlassian.net/browse/LIB3D-97
 };

@@ -8,6 +8,14 @@ global.XMLHttpRequest = function () {
     this.open = function () {};
 };
 
+document.listeners = {};
+
+document.addEventListener = function (name, cb) {
+    document.listeners[name] = cb;
+};
+document.removeEventListener = function (name) {
+    document.listeners[name] = null;
+};
 document.createElement = function() {
     return {
         width: 100,
@@ -15,8 +23,8 @@ document.createElement = function() {
         style: {position: ''},
         appendChild: function () {},
         getContext: function () {},
-        addEventListener: function () {},
-        removeEventListener: function () {}
+        addEventListener: document.addEventListener,
+        removeEventListener: document.removeEventListener
     };
 };
 

@@ -1,7 +1,7 @@
 // Workaround for https://github.com/rollup/rollup-plugin-commonjs/issues/105
 if (!window.require) {
-	window.require = function () {};
-};
+    window.require = function () {};
+}
 // Workaround for code that is meant to run in node.js
 window.global = window;
 

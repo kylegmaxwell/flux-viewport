@@ -5,16 +5,12 @@ import EdgesHelper from './EdgesHelper.js';
 import FluxCameras from './FluxCameras.js';
 import FluxHelpers from './helpers/FluxHelpers.js';
 import FluxRenderContext from './FluxRenderContext.js';
-import FluxEditorControls from './controls/FluxEditorControls.js';
+import CameraControls from './controls/CameraControls.js';
 import SelectionControls from './controls/SelectionControls.js';
-import * as FluxThreePlugins from 'flux-three-plugins/src/index.js';
-import * as shaders from './shaders.js';
 import * as constants from './controls/constants.js';
 
 /**
- * Class wrapping the renderer with custom passes and context swapping.
- * Multipass rendering uses GPU shaders to accomplish ambient obscurance
- * and stencil buffer shadows.
+ * Class wrapping the three.js renderer with more build in functionality.
  * Context swapping lets a single OpenGL context and canvas be used for multiple renderers.
  * @class FluxRenderer
  * @param {Element} domParent The div container for the canvas
@@ -28,16 +24,6 @@ export default function FluxRenderer(domParent, width, height, selection) {
     // Dom element that wraps the canvas
     this._domParent = domParent;
 
-    // Determines if multipass rendering (FluxThreePlugins.EffectsComposer) is used
-    this._multipass = false;
-
-    // TODO: Convert this to a list of passes rather than individual bools
-    // Determines if ambient occlusion is used (requires multipass to be true)
-    this._showOcclusion = true;
-
-    // Determines if stencilbuffer shadows are used (requires multipass)
-    this._showShadows = false;
-
     // Current three.js geometry to render
     this._model = null;
 
@@ -47,9 +33,6 @@ export default function FluxRenderer(domParent, width, height, selection) {
     // The context that contains the renderer and corresponds to a canvas
     // Create renderer for the first time.
     this._context = FluxRenderContext.getNewContext();
-
-    // EffectComposer object, used in multipass rendering
-    this._composer = new FluxThreePlugins.EffectComposer(this._context.renderer);
 
     this._width = width;
     this._height = height;
@@ -69,7 +52,7 @@ export default function FluxRenderer(domParent, width, height, selection) {
     this._controls = [];
     // Camera to be rendered with.Any instance of `THREE.Camera` can be set here.
     var _this = this;
-    this._editorControls = this.addControls(FluxEditorControls);
+    this._editorControls = this.addControls(CameraControls);
     this._editorControls.addEventListener(constants.Events.CHANGE, function(event) {
         _this._cameras.updateCamera(_this._width, _this._height);
         _this.dispatchEvent(event);
@@ -84,17 +67,6 @@ export default function FluxRenderer(domParent, width, height, selection) {
     // Scene containing edges geometry for hidden line rendering
     this._edgesScene = new THREE.Scene();
     this._edgesMode = EdgesHelper.EDGES_MODES.NONE;
-
-    // variables for stencilbuffer shadows
-    // Scene holding shadow volumes = THREE.Scene
-    this._shadowScene = new THREE.Scene();
-    // Color of shadows (multiplied with ground) @type {THREE.Color}
-    this._shadowColor = new THREE.Color(0.08, 0.0, 0.2);
-    // Alpha opacity of shadow, where 1.0 is completely opaque
-    this._shadowAlpha = 0.35;
-    this._shadowBuilder = new FluxThreePlugins.ShadowBuilder(this._shadowLight);
-
-    this._addPasses();
 }
 
 FluxRenderer.prototype = Object.create( THREE.EventDispatcher.prototype );
@@ -292,12 +264,6 @@ FluxRenderer.prototype.setView = function(view) {
         this._controls[i].setCamera(this._cameras.getCamera());
     }
     this._helpers.setView(view);
-
-    if (!this._renderPasses) return;
-    this._renderPasses.renderPass.camera = this._cameras.getCamera();
-    this._renderPasses.edgesPass.camera = this._cameras.getCamera();
-    this._renderPasses.helperPass.camera = this._cameras.getCamera();
-    this._renderPasses.stencilPass.camera = this._cameras.getCamera();
 };
 
 /**
@@ -321,147 +287,15 @@ FluxRenderer.prototype._addRenderTargets = function() {
 };
 
 /**
- * Adds enabled passes to the EffectComposer
- *
- * Always begins with a render pass
- * Always ends with an antialiasing (FXAA) pass
- *
- * May include the following: Ambient occlusion, Shadows
- * @private
- */
-FluxRenderer.prototype._addPasses = function() {
-    // _renderPasses dictionary for holding passes that need to be accessed or modified
-    this._renderPasses = {};
-    this._addRenderTargets();
-
-    // diffuse render pass
-    var renderPass = new FluxThreePlugins.RenderPass(this._scene, this._cameras.getCamera());
-    this._composer.addPass(renderPass);
-    this._renderPasses.renderPass = renderPass;
-
-    var edgesPass = new FluxThreePlugins.RenderPass(this._edgesScene, this._cameras.getCamera());
-    edgesPass.clear = false;
-    this._composer.addPass(edgesPass);
-    edgesPass.polygonOffset = true;
-    edgesPass.enabled = !!this._edgesScene;
-    this._renderPasses.edgesPass = edgesPass;
-
-    // helper render pass
-    var helperPass = new FluxThreePlugins.RenderPass(this._helpersScene, this._cameras.getCamera());
-    helperPass.clear = false;
-    this._composer.addPass(helperPass);
-    this._renderPasses.helperPass = helperPass;
-    helperPass.enabled = true;
-
-    // ambient occlusion pass
-    var aoPass = new FluxThreePlugins.ShaderPass(FluxThreePlugins.SAOShader);
-    // set uniform vars for ao pass
-    aoPass.uniforms.tDepth.value = this._depthTarget;
-    aoPass.uniforms.tNorm.value = this._normalTarget;
-    aoPass.uniforms.projInv.value = new THREE.Matrix4();//TODO.getInverse(this._cameras.getCamera().projectionMatrix);
-    aoPass.uniforms.onlyAO.value = false; // set to true to view only ambient occlusion
-    aoPass.clear = true;
-    aoPass.needsSwap = true;
-    this._renderPasses.aoPass = aoPass;
-    this._composer.addPass(aoPass);
-
-    // stencil buffer shadow passes
-    var copyPass = new FluxThreePlugins.ShaderPass( FluxThreePlugins.CopyShader );
-    copyPass.needsSwap = false;
-    this._composer.addPass( copyPass ); // copy AO to write buffer
-    this._renderPasses.copyPass = copyPass;
-
-    var stencilPass = new FluxThreePlugins.StencilPass( this._shadowScene, this._cameras.getCamera());
-    this._composer.addPass( stencilPass ); // render shadow volumes to stencilbuffer
-    this._renderPasses.stencilPass = stencilPass;
-
-    var darkenPass = new FluxThreePlugins.ShaderPass( FluxThreePlugins.DarkenShader );
-    darkenPass.uniforms.alpha.value = this._shadowAlpha;
-    darkenPass.uniforms.color.value = new THREE.Vector3(this._shadowColor.r, this._shadowColor.g, this._shadowColor.b);
-    darkenPass.needsSwap = false;
-    this._composer.addPass( darkenPass ); // darken stencil areas
-    this._renderPasses.darkenPass = darkenPass;
-
-    var clearPass = new FluxThreePlugins.ClearStencilPass();
-    clearPass.needsSwap = true;
-    this._composer.addPass( clearPass ); // clear stencil
-    this._renderPasses.clearPass = clearPass;
-
-    // fast approximate antialiasing pass
-    var FXAAPass = new FluxThreePlugins.ShaderPass(FluxThreePlugins.FXAAShader);
-    FXAAPass.renderToScreen = true;
-    this._renderPasses.FXAAPass = FXAAPass;
-    this._composer.addPass(FXAAPass);
-};
-
-/**
- * For multipass rendering, update which render passes are enabled.
- * Based on user preferences some passes may be turned on or off.
- * Also passes may be disabled if the corresponding scene is empty.
- * @private
- */
-FluxRenderer.prototype._updatePasses = function () {
-    if (this._showOcclusion) {
-        // populate depth target
-        this._scene.overrideMaterial = shaders.DEPTH_MATERIAL;
-        this._context.renderer.clearTarget( this._depthTarget, true, true );
-        this._context.renderer.render( this._scene, this._cameras.getCamera(), this._depthTarget );
-
-        // populate normal target (set clearColor to (0,0,0) since
-        // empty pixels do not have normals)
-        this._context.renderer.setClearColor( 0x000000 );
-        this._scene.overrideMaterial = shaders.NORMAL_MATERIAL;
-        this._context.renderer.clearTarget( this._normalTarget, true, true );
-        this._context.renderer.render( this._scene, this._cameras.getCamera(), this._normalTarget );
-        this._scene.overrideMaterial = null;
-        this._context.renderer.setClearColor( this._clearColor );
-
-        // update ambient occlusion shader uniforms
-        var projInv = new THREE.Matrix4();
-        projInv.getInverse(this._cameras.getCamera().projectionMatrix);
-        this._renderPasses.aoPass.uniforms.projInv.value = projInv;
-        this._renderPasses.aoPass.uniforms.size.value.set(this._width, this._height);
-        this._renderPasses.aoPass.uniforms.onlyDiffuse.value = false;
-    } else {
-        this._renderPasses.aoPass.uniforms.onlyDiffuse.value = true;
-    }
-
-    if (this._showShadows) {
-        this._composer.renderTarget1.stencilBuffer = true;
-        this._composer.renderTarget2.stencilBuffer = true;
-        this._renderPasses.copyPass.enabled = true;
-        this._renderPasses.stencilPass.enabled = true;
-        this._renderPasses.darkenPass.enabled = true;
-        this._renderPasses.clearPass.enabled = true;
-    } else {
-        this._composer.renderTarget1.stencilBuffer = false;
-        this._composer.renderTarget2.stencilBuffer = false;
-        this._renderPasses.copyPass.enabled = false;
-        this._renderPasses.stencilPass.enabled = false;
-        this._renderPasses.darkenPass.enabled = false;
-        this._renderPasses.clearPass.enabled = false;
-    }
-
-    // set antialiasing 'resolution' uniform to current screen resolution
-    this._renderPasses.FXAAPass.uniforms.resolution.value.set(1.0/this._width, 1.0/this._height);
-};
-
-/**
 * Render the scene with its geometry.
 */
 FluxRenderer.prototype.doRender = function () {
     this._setHost();
     this._update();
     this._context.renderer.clear();
-    if (this._multipass) {
-        this._updatePasses();
-        // render scene
-        this._composer.render();
-    } else {
-        this._context.renderer.render(this._scene, this._cameras.getCamera());
-        this._context.renderer.render(this._edgesScene, this._cameras.getCamera());
-        this._context.renderer.render(this._helpersScene, this._cameras.getCamera());
-    }
+    this._context.renderer.render(this._scene, this._cameras.getCamera());
+    this._context.renderer.render(this._edgesScene, this._cameras.getCamera());
+    this._context.renderer.render(this._helpersScene, this._cameras.getCamera());
 };
 
 /**
@@ -470,48 +304,6 @@ FluxRenderer.prototype.doRender = function () {
  */
 FluxRenderer.prototype.anyValidPrims = function() {
     return this._model ? this._model.children.length > 0 : false;
-};
-
-/**
-* Set the light that is casting shadows.
-* @param {THREE.Light} light      light object, position is saved
-*/
-FluxRenderer.prototype.setShadowLight = function(light) {
-    // Enable shadows on this renderer
-    this._multipass = true;
-    this._showShadows = true;
-
-    this._shadowLight = light.position;
-    this._shadowBuilder.updateLight(light.position);
-};
-
-/**
- * Add the shadows for everything in the current model
- */
-FluxRenderer.prototype.addShadows = function() {
-    var _this = this;
-    this._model.traverse(function (obj) {
-        if (obj && obj.geometry) {
-            _this.addShadow(obj);
-        }
-    });
-};
-/**
-* Add a shadow to the scene.
-* @param {THREE.Mesh} mesh        The mesh of the object casting a shadow
-*/
-FluxRenderer.prototype.addShadow = function(mesh) {
-    var shadow = this._shadowBuilder.getShadowVolume(mesh);
-    this._shadowScene.add(shadow);
-};
-
-/**
-* Remove a shadow from the scene.
-* @param  {THREE.Mesh} mesh       The mesh of the shadow to remove
-*/
-FluxRenderer.prototype.removeShadow = function(mesh) {
-    var shadow = this._shadowBuilder.getShadowVolume(mesh);
-    this._shadowScene.remove(shadow);
 };
 
 /**
@@ -557,8 +349,8 @@ FluxRenderer.prototype._setHost = function() {
  * @private
  */
 FluxRenderer.prototype._update = function() {
-    this._context.renderer.autoClearColor = this._multipass;
-    this._context.renderer.autoClearDepth = this._multipass;
+    this._context.renderer.autoClearColor = false;
+    this._context.renderer.autoClearDepth = false;
     this._context.renderer.setSize(this._width, this._height);
     this._context.renderer.setClearColor(this._clearColor, this._clearAlpha);
 };
@@ -574,8 +366,6 @@ FluxRenderer.prototype.setSize = function(width, height) {
     this._height = height;
 
     this._cameras.updateCamera(this._width, this._height);
-
-    this._composer.setSize(this._width, this._height);
 
     for (var i=0;i<this._controls.length;i++) {
         this._controls[i].setSize(this._width, this._height);
