@@ -253,8 +253,8 @@ FluxRenderer.prototype.detach = function() {
 };
 
 /**
- * Change the camera view
- * @param {String} view The new view mode
+ * Set the camera to the default coordinates for the given view.
+ * @param {FluxCameras.VIEWS} view The new view mode
  */
 FluxRenderer.prototype.setView = function(view) {
     this._cameras.setView(view);

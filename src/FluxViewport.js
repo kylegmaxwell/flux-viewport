@@ -473,8 +473,8 @@ FluxViewport.prototype.setClearColor = function(color, alpha) {
 };
 
 /**
- * Set which camera view to use (ex perspective, top etc.)
- * @param {String} view Name of the camera view to use
+ * Set the camera to the default coordinates for the given view.
+ * @param {FluxCameras.VIEWS} view The new view mode
  */
 FluxViewport.prototype.setView = function(view) {
     this._renderer.setView(view);
