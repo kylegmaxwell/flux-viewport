@@ -72,7 +72,7 @@ FluxCameras.isValidView = function (view) {
 };
 
 /**
- * Set the camera to the default coordinates for the given view.
+ * Set which camera view to use (ex perspective, top etc.).
  * @param {FluxCameras.VIEWS} view The new view mode
  */
 FluxCameras.prototype.setView = function (view) {
