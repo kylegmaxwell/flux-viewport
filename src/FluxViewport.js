@@ -553,3 +553,33 @@ FluxViewport.prototype.activateShadows = function() {
 FluxViewport.prototype.deactivateShadows = function() {
     this._renderer.deactivateShadows();
 };
+
+// Temporary variables allocated once to save on garbage collection
+var p = new THREE.Vector3();
+var n = new THREE.Vector3();
+var d = new THREE.Vector3();
+var o = new THREE.Vector3(0,0,0);
+
+/**
+ * Enable renderer clipping to reveal inside of geometry
+ * @param {Number} px The x component of a point on the clipping plane
+ * @param {Number} py The y component of a point on the clipping plane
+ * @param {Number} pz The z component of a point on the clipping plane
+ * @param {Number} nx The x component of the clipping plane normal
+ * @param {Number} ny The y component of the clipping plane normal
+ * @param {Number} nz The z component of the clipping plane normal
+ * @param {Number} dist Distance from origin to clipping plane along normal
+ */
+FluxViewport.prototype.activateClipping = function(px, py, pz, nx, ny, nz) {
+    p.set(px, py, pz);
+    n.set(nx, ny, nz);
+    var dist = d.copy(o).sub(p).projectOnVector(n).length();
+    this._renderer.activateClipping(n.multiplyScalar(-1), dist);
+};
+
+/**
+ * Turn of clipping so that all geometry will be rendered
+ */
+FluxViewport.prototype.deactivateClipping = function() {
+    this._renderer.deactivateClipping();
+};

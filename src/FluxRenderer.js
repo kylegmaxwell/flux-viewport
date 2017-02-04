@@ -40,6 +40,8 @@ export default function FluxRenderer(domParent, width, height, selection) {
     this._height = height;
 
     this._shadowMapEnabled = false;
+    this._clippingEnabled = false;
+    this._clippingPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), 0 );
 
     this._createCacheCanvas(width, height);
 
@@ -296,10 +298,14 @@ FluxRenderer.prototype._addRenderTargets = function() {
 FluxRenderer.prototype.doRender = function () {
     this._setHost();
     this._update();
+    var clip = this._context.renderer.clippingPlanes;
     this._context.renderer.clear();
     this._context.renderer.render(this._scene, this._cameras.getCamera());
+    // Clipping does not affect helpers
+    this._context.renderer.clippingPlanes = [];
     this._context.renderer.render(this._edgesScene, this._cameras.getCamera());
     this._context.renderer.render(this._helpersScene, this._cameras.getCamera());
+    this._context.renderer.clippingPlanes = clip;
 };
 
 /**
@@ -345,6 +351,8 @@ FluxRenderer.prototype._setHost = function() {
     this._context.currentHost = this;
     this.setSize(this._width, this._height);
     this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    this._updateClipping();
+
     // Move the THREE.WebGLRenderer's canvas under the new host
     this._domParent.appendChild(this._context.renderer.domElement);
 };
@@ -443,6 +451,49 @@ FluxRenderer.prototype.deactivateShadows = function() {
             light.castShadow = false;
         }
     });
+};
+
+/**
+ * Enable renderer clipping to reveal inside of geometry
+ * @param {THREE.Vector3} n The clipping plane normal
+ * @param {Number} dist Distance from origin to clipping plane along normal
+ */
+FluxRenderer.prototype.activateClipping = function(n, dist) {
+    this._clippingEnabled = true;
+    this._clippingPlane.constant = dist;
+    this._clippingPlane.normal.copy(n);
+    this._updateClipping();
+};
+
+/**
+ * Turn of clipping so that all geometry will be rendered
+ */
+FluxRenderer.prototype.deactivateClipping = function() {
+    this._clippingEnabled = false;
+    this._updateClipping();
+};
+
+
+/**
+ * Update scene data for current clipping state after something changes.
+ */
+FluxRenderer.prototype._updateClipping = function() {
+    if (this._clippingEnabled) {
+        this._context.renderer.clippingPlanes = [this._clippingPlane];
+        this._scene.traverse(function (elem) {
+            if (elem.material) {
+                elem.parent.userData.materialSide = elem.material.side;
+                elem.material.side = THREE.DoubleSide;
+            }
+        });
+    } else {
+        this._context.renderer.clippingPlanes = [];
+        this._scene.traverse(function (elem) {
+            if (elem.material && elem.parent.userData.materialSide != null) {
+                elem.material.side = elem.parent.userData.materialSide;
+            }
+        });
+    }
 };
 
 /**

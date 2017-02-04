@@ -2,6 +2,7 @@
 
 import FluxViewport from '../src/FluxViewport.js';
 import viewportState from './viewportState.json';
+import * as THREE from 'three';
 
 // This is a stub
 var domElement = document.createElement();
@@ -146,6 +147,24 @@ export function viewportShadows(t) {
                 }
             }
         });
+        t.end();
+    }).catch(function (errors) {
+        t.fail('Caught an error: '+ errors);
+        t.end();
+    });
+}
+
+export function viewportClipping(t) {
+    var sphere = {"origin":[0,0,0],"primitive":"sphere","radius":10,"id":"mySphere"};
+    var viewport = new FluxViewport(domElement);
+    viewport.setGeometryEntity(sphere).then(function (result) {
+        var object = result.getObject();
+        t.equal(object.children[0].material.side, THREE.FrontSide, 'Solid object default to one side');
+        viewport.activateClipping(0,0.4,0,0,1,0);
+        t.equal(object.children[0].material.side, THREE.DoubleSide, 'Objects must be double side when clipped');
+        t.ok(viewport._renderer._clippingPlane.constant > 0, 'Plane does not go through origin');
+        viewport.deactivateClipping();
+        t.equal(object.children[0].material.side, THREE.FrontSide, 'Solid object return to one side');
         t.end();
     }).catch(function (errors) {
         t.fail('Caught an error: '+ errors);
