@@ -7,7 +7,9 @@ import FluxHelpers from './helpers/FluxHelpers.js';
 import FluxRenderContext from './FluxRenderContext.js';
 import CameraControls from './controls/CameraControls.js';
 import SelectionControls from './controls/SelectionControls.js';
-import * as constants from './controls/constants.js';
+import * as controlsConstants from './controls/constants.js';
+import * as constants from './constants.js';
+import * as math from './utils/math.js';
 
 /**
  * Class wrapping the three.js renderer with more build in functionality.
@@ -37,6 +39,8 @@ export default function FluxRenderer(domParent, width, height, selection) {
     this._width = width;
     this._height = height;
 
+    this._shadowMapEnabled = false;
+
     this._createCacheCanvas(width, height);
 
     this.setClearColor(0xC5CDCC);
@@ -53,7 +57,7 @@ export default function FluxRenderer(domParent, width, height, selection) {
     // Camera to be rendered with.Any instance of `THREE.Camera` can be set here.
     var _this = this;
     this._editorControls = this.addControls(CameraControls);
-    this._editorControls.addEventListener(constants.Events.CHANGE, function(event) {
+    this._editorControls.addEventListener(controlsConstants.Events.CHANGE, function(event) {
         _this._cameras.updateCamera(_this._width, _this._height);
         _this.dispatchEvent(event);
     });
@@ -117,7 +121,7 @@ function _deleteFromScene(scene, model) {
 FluxRenderer.prototype.addControls = function(CustomControls) {
     var customControls = new CustomControls(this._cameras.getCamera(), this._scene, this._domParent, this._width, this._height);
     var _this = this;
-    customControls.addEventListener(constants.Events.CHANGE, function (event) {
+    customControls.addEventListener(controlsConstants.Events.CHANGE, function (event) {
         _this.dispatchEvent(event);
     });
     this._controls.push(customControls);
@@ -340,6 +344,7 @@ FluxRenderer.prototype._setHost = function() {
     }
     this._context.currentHost = this;
     this.setSize(this._width, this._height);
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
     // Move the THREE.WebGLRenderer's canvas under the new host
     this._domParent.appendChild(this._context.renderer.domElement);
 };
@@ -373,6 +378,71 @@ FluxRenderer.prototype.setSize = function(width, height) {
 
     this._cacheCanvas.height = height;
     this._cacheCanvas.width = width;
+};
+
+var dir = new THREE.Vector3();
+var l = new THREE.Vector3();
+var perp = new THREE.Vector3();
+var par = new THREE.Vector3();
+
+/**
+ * Enable shadows on the renderer, lights and objects.
+ * This causes objects to cast shadow on their environment.
+ */
+FluxRenderer.prototype.activateShadows = function() {
+    this._shadowMapEnabled = true;
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    var sphere = math.getBoundingSphere(this._scene);
+
+    this._scene.traverse(function (child) {
+        if (child.type === 'Mesh') {
+            child.castShadow = true;
+            child.receiveShadow = true;
+        }
+        if (child.type === 'DirectionalLight') {
+            var light = child;
+            light.castShadow = true;
+            dir.copy(sphere.center).sub(light.position);
+            var d = dir.length();
+            light.shadow.camera.near = -(d+sphere.radius);
+            light.shadow.camera.far = d+sphere.radius;
+            // Get the distance from the camera's axis to the center of the scene and use that
+            // to set the dimensions of the shadow camera's clipping box
+            l.set(0,0,0).sub(light.position).normalize();
+            par.copy(dir).projectOnVector(l);
+            perp.copy(dir).sub(par);
+            var radius = sphere.radius + perp.length();
+
+            light.shadow.camera.left = -radius;
+            light.shadow.camera.right = radius;
+            light.shadow.camera.top = radius;
+            light.shadow.camera.bottom = -radius;
+
+            light.shadow.bias = constants.SHADOW_DEFAULTS.BIAS;
+            light.shadow.mapSize.width = constants.SHADOW_DEFAULTS.MAP_WIDTH;
+            light.shadow.mapSize.height = constants.SHADOW_DEFAULTS.MAP_HEIGHT;
+        }
+    });
+};
+
+/**
+ * Enable shadows on the renderer, lights and objects.
+ * This causes objects to cast shadow on their environment.
+ */
+FluxRenderer.prototype.deactivateShadows = function() {
+    this._shadowMapEnabled = false;
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    this._scene.traverse(function (child) {
+        if (child.type === 'Mesh') {
+            child.castShadow = false;
+            child.receiveShadow = false;
+        }
+        if (child.type === 'DirectionalLight') {
+            var light = child;
+            light.castShadow = false;
+        }
+    });
 };
 
 /**

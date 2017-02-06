@@ -7,7 +7,6 @@ import FluxCameras from './FluxCameras.js';
 import * as FluxJsonToThree from 'flux-json-to-three';
 import {scene} from 'flux-modelingjs';
 import * as constants from './controls/constants.js';
-import * as print from './utils/debugPrint.js';
 
 /**
  * UI widget to render 3D geometry.
@@ -540,9 +539,17 @@ FluxViewport.prototype.getGlCanvas = function() {
 };
 
 /**
- * Turn on shadow rendering (not implemented)
+ * Turn on shadow rendering. Uses THREE.js depth map shadows.
+ * Turn this on after you have added lights and geometry to your scene and they
+ * will be configured for shadow mapping along with the renderer.
  */
 FluxViewport.prototype.activateShadows = function() {
-    print.warn('Shadows are not implemented yet');
-    // https://vannevar.atlassian.net/browse/LIB3D-97
+    this._renderer.activateShadows();
+};
+
+/**
+ * Turn off shadow rendering.
+ */
+FluxViewport.prototype.deactivateShadows = function() {
+    this._renderer.deactivateShadows();
 };

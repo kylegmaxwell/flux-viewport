@@ -3,6 +3,7 @@ import ViewportControls from './ViewportControls.js';
 import * as THREE from 'three';
 import * as constants from './constants.js';
 import * as FluxJsonToThree from 'flux-json-to-three';
+import * as math from '../utils/math.js';
 
 /**
  * Create a three.js material from Flux JSON
@@ -366,28 +367,6 @@ SelectionControls.prototype.deactivate = function () {
     }
 };
 
-// Singleton temporary variables (saves on garbage collection)
-var vTmp = new THREE.Vector3();
-var pA = new THREE.Vector3();
-var pB = new THREE.Vector3();
-var ab = new THREE.Vector3();
-var sphereTmp = new THREE.Sphere();
-
-/**
- * Compute the union of two THREE.Sphere shapes and store the result in the first input
- * @param  {THREE.Sphere} a First sphere, will be set to result
- * @param  {THREE.Sphere} b Second sphere
- */
-function _sphereJoin(a, b) {//base, extra
-    // The new sphere is defined by the two maximal points along the line between the two centers
-    ab.copy(b.center).sub(a.center).normalize();
-    pB.copy(ab).multiplyScalar(b.radius).add(b.center);
-    pA.copy(ab).multiplyScalar(-1*a.radius).add(a.center);
-    var center = vTmp.copy(pA).add(pB).multiplyScalar(0.5);
-    var rad = Math.max(center.distanceTo(pA), center.distanceTo(pB));
-    a.set(center, rad);
-}
-
 /**
  * Return the current selection
  * @return {Object}  Map from uuid to Object3D
@@ -401,18 +380,9 @@ SelectionControls.prototype.getSelection = function () {
  * @return {THREE.Object3D}  The current selection
  */
 SelectionControls.prototype.getSelectionSphere = function () {
-    var sphereAccum = null;
+    var selectionList = [];
     _eachSelection(this._selection, function (selection) {
-        if (!selection.geometry.boundingSphere) {
-            selection.geometry.computeboundingSphere();
-        }
-        selection.updateMatrixWorld();
-        sphereTmp.copy(selection.geometry.boundingSphere).applyMatrix4(selection.matrixWorld);
-        if (sphereAccum) {
-            _sphereJoin(sphereAccum, sphereTmp);
-        } else {
-            sphereAccum = new THREE.Sphere().copy(sphereTmp);
-        }
+        selectionList.push(selection);
     });
-    return sphereAccum;
+    return math.getListBoundingSphere(selectionList);
 };
