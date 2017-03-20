@@ -49,7 +49,7 @@ export function getListBoundingSphere(objs) {
         var selection = objs[i];
         if (!selection.geometry) continue;
         if (!selection.geometry.boundingSphere) {
-            selection.geometry.computeboundingSphere();
+            selection.geometry.computeBoundingSphere();
         }
         selection.updateMatrixWorld();
         sphereTmp.copy(selection.geometry.boundingSphere).applyMatrix4(selection.matrixWorld);

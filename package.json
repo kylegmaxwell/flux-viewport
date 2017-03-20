@@ -1,6 +1,6 @@
 {
   "name": "flux-viewport",
-  "version": "0.34.3",
+  "version": "0.34.4",
   "description": "Flux viewport for visualizing geometry",
   "main": "dist/flux-viewport-bundle.global.min.js",
   "jsnext:main": "src/index.js",
