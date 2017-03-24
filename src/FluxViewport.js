@@ -7,6 +7,7 @@ import FluxCameras from './FluxCameras.js';
 import * as FluxJsonToThree from 'flux-json-to-three';
 import {scene} from 'flux-modelingjs';
 import * as constants from './controls/constants.js';
+import * as print from './utils/debugPrint.js';
 
 /**
  * UI widget to render 3D geometry.
@@ -27,8 +28,9 @@ import * as constants from './controls/constants.js';
  * @param {Number}    optionalParams.width         The width of the canvas
  * @param {Number}    optionalParams.height        The height of the canvas
  * @param {String}    optionalParams.tessUrl       The url for making brep tessellation requests (overrides projectId) (Used when server is not flux.io)
- * @param {Enumeration}    optionalParams.selection       Whether to enable user selection
+ * @param {Object}    optionalParams.selection     Whether to enable user selection
  * @param {String}    optionalParams.projectId     Id of a flux project (required to render breps)
+ * @param {Boolean}   optionalParams.noLighting    No lights are added to viewport when this is true
  * @param {String}    optionalParams.token         The current flux auth token (required to render breps)
  */
 export default function FluxViewport (domParent, optionalParams) {
@@ -81,6 +83,11 @@ export default function FluxViewport (domParent, optionalParams) {
     domParent.addEventListener('mouseenter', function(){
         _this.render();
     });
+
+    // Add lights unless explicitly disabled
+    if (!optionalParams || !optionalParams.noLighting) {
+        this._setupDefaultLighting();
+    }
 
     // Cache of the Flux entity objects for downloading
     this._entities = null;
@@ -426,9 +433,20 @@ FluxViewport.prototype._downloadJson = function(data, prefix) {
 };
 
 /**
+  * DEPRECATED: This is now controlled via the parameters object to the constructor
+  * This function is provided for backward compatibility.
+  */
+FluxViewport.prototype.setupDefaultLighting = function() {
+    var message = 'FluxViewport.setupDefaultLighting is deprecated, and is now'+
+    ' automatically enabled unless you opt out via the optionalParams.noLighting'+
+    ' parameter on the constructor.';
+    print.warn(message);
+};
+
+/**
  * Create a default 3 light rig on the renderer's scene.
  */
-FluxViewport.prototype.setupDefaultLighting = function() {
+FluxViewport.prototype._setupDefaultLighting = function() {
     var lighting = new THREE.Object3D();
     lighting.name = 'Lights';
 

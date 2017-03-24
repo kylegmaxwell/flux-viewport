@@ -45,7 +45,7 @@ export default function FluxRenderer(domParent, width, height, selection) {
 
     this._createCacheCanvas(width, height);
 
-    this.setClearColor(0xC5CDCC);
+    this.setClearColor(0xFFFFFF);
 
     this._cameras = new FluxCameras(width, height);
     this._helpers = new FluxHelpers();
