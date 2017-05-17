@@ -30,7 +30,6 @@ export default ({
         // Will not be needed after gl-matrix uses ES6 modules
         // https://github.com/toji/gl-matrix/pull/209
         replace({
-          include: '**/gl-matrix/src/gl-matrix/common.js',
           values: { '\'SIMD\' in this': '\'SIMD\' in global' }
         }),
         replace({
