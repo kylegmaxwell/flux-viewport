@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>FluxRenderer.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
@@ -23,7 +24,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="EdgesHelper.html">EdgesHelper</a><ul class='methods'><li data-type='method'><a href="EdgesHelper.html#.AddEdges">AddEdges</a></li></ul></li><li><a href="FluxCameras.html">FluxCameras</a><ul class='methods'><li data-type='method'><a href="FluxCameras.html#.cameraFromJSON">cameraFromJSON</a></li><li data-type='method'><a href="FluxCameras.html#.cameraToJSON">cameraToJSON</a></li><li data-type='method'><a href="FluxCameras.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxCameras.html#getCamera">getCamera</a></li><li data-type='method'><a href="FluxCameras.html#setView">setView</a></li><li data-type='method'><a href="FluxCameras.html#toJSON">toJSON</a></li><li data-type='method'><a href="FluxCameras.html#updateCamera">updateCamera</a></li></ul></li><li><a href="FluxRenderContext.html">FluxRenderContext</a><ul class='methods'><li data-type='method'><a href="FluxRenderContext.html#.getNextContext">getNextContext</a></li></ul></li><li><a href="FluxRenderer.html">FluxRenderer</a><ul class='methods'><li data-type='method'><a href="FluxRenderer.html#addControls">addControls</a></li><li data-type='method'><a href="FluxRenderer.html#anyValidPrims">anyValidPrims</a></li><li data-type='method'><a href="FluxRenderer.html#detach">detach</a></li><li data-type='method'><a href="FluxRenderer.html#doRender">doRender</a></li><li data-type='method'><a href="FluxRenderer.html#focus">focus</a></li><li data-type='method'><a href="FluxRenderer.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxRenderer.html#getGlCanvas">getGlCanvas</a></li><li data-type='method'><a href="FluxRenderer.html#getSelection">getSelection</a></li><li data-type='method'><a href="FluxRenderer.html#homeCamera">homeCamera</a></li><li data-type='method'><a href="FluxRenderer.html#setClearColor">setClearColor</a></li><li data-type='method'><a href="FluxRenderer.html#setEdgesMode">setEdgesMode</a></li><li data-type='method'><a href="FluxRenderer.html#setHelpersVisible">setHelpersVisible</a></li><li data-type='method'><a href="FluxRenderer.html#setLights">setLights</a></li><li data-type='method'><a href="FluxRenderer.html#setModel">setModel</a></li><li data-type='method'><a href="FluxRenderer.html#setSelection">setSelection</a></li><li data-type='method'><a href="FluxRenderer.html#setSelectionMaterial">setSelectionMaterial</a></li><li data-type='method'><a href="FluxRenderer.html#setSize">setSize</a></li><li data-type='method'><a href="FluxRenderer.html#setView">setView</a></li><li data-type='method'><a href="FluxRenderer.html#toJSON">toJSON</a></li></ul></li><li><a href="FluxViewport.html">FluxViewport</a><ul class='methods'><li data-type='method'><a href="FluxViewport.html#.getChangeEvent">getChangeEvent</a></li><li data-type='method'><a href="FluxViewport.html#.getEdgesModes">getEdgesModes</a></li><li data-type='method'><a href="FluxViewport.html#.getEvents">getEvents</a></li><li data-type='method'><a href="FluxViewport.html#.getSelectionModes">getSelectionModes</a></li><li data-type='method'><a href="FluxViewport.html#.getViews">getViews</a></li><li data-type='method'><a href="FluxViewport.html#.isKnownGeom">isKnownGeom</a></li><li data-type='method'><a href="FluxViewport.html#activateShadows">activateShadows</a></li><li data-type='method'><a href="FluxViewport.html#addControls">addControls</a></li><li data-type='method'><a href="FluxViewport.html#downloadState">downloadState</a></li><li data-type='method'><a href="FluxViewport.html#focus">focus</a></li><li data-type='method'><a href="FluxViewport.html#fromJSON">fromJSON</a></li><li data-type='method'><a href="FluxViewport.html#getAutoFocus">getAutoFocus</a></li><li data-type='method'><a href="FluxViewport.html#getGlCanvas">getGlCanvas</a></li><li data-type='method'><a href="FluxViewport.html#getJson">getJson</a></li><li data-type='method'><a href="FluxViewport.html#getObjectMap">getObjectMap</a></li><li data-type='method'><a href="FluxViewport.html#getSelection">getSelection</a></li><li data-type='method'><a href="FluxViewport.html#homeCamera">homeCamera</a></li><li data-type='method'><a href="FluxViewport.html#render">render</a></li><li data-type='method'><a href="FluxViewport.html#setAutoFocus">setAutoFocus</a></li><li data-type='method'><a href="FluxViewport.html#setClearColor">setClearColor</a></li><li data-type='method'><a href="FluxViewport.html#setEdgesMode">setEdgesMode</a></li><li data-type='method'><a href="FluxViewport.html#setFogDensity">setFogDensity</a></li><li data-type='method'><a href="FluxViewport.html#setGeometryEntity">setGeometryEntity</a></li><li data-type='method'><a href="FluxViewport.html#setGeometryJson">setGeometryJson</a></li><li data-type='method'><a href="FluxViewport.html#setHelpersVisible">setHelpersVisible</a></li><li data-type='method'><a href="FluxViewport.html#setSelection">setSelection</a></li><li data-type='method'><a href="FluxViewport.html#setSelectionMaterial">setSelectionMaterial</a></li><li data-type='method'><a href="FluxViewport.html#setSize">setSize</a></li><li data-type='method'><a href="FluxViewport.html#setTessUrl">setTessUrl</a></li><li data-type='method'><a href="FluxViewport.html#setupDefaultLighting">setupDefaultLighting</a></li><li data-type='method'><a href="FluxViewport.html#setView">setView</a></li><li data-type='method'><a href="FluxViewport.html#toJSON">toJSON</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#_deleteFromScene">_deleteFromScene</a></li><li><a href="global.html#_removeGeometries">_removeGeometries</a></li></ul>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="EdgesHelper.html">EdgesHelper</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="EdgesHelper.html#.AddEdges">AddEdges</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="FluxCameras.html">FluxCameras</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxCameras.html#.cameraFromJSON">cameraFromJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxCameras.html#.cameraToJSON">cameraToJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxCameras.html#fromJSON">fromJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxCameras.html#getCamera">getCamera</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxCameras.html#setView">setView</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxCameras.html#toJSON">toJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxCameras.html#updateCamera">updateCamera</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="FluxRenderContext.html">FluxRenderContext</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderContext.html#.getNextContext">getNextContext</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="FluxRenderer.html">FluxRenderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#_updateClipping">_updateClipping</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#activateClipping">activateClipping</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#activateShadows">activateShadows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#addControls">addControls</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#anyValidPrims">anyValidPrims</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#deactivateClipping">deactivateClipping</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#deactivateShadows">deactivateShadows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#detach">detach</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#doRender">doRender</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#focus">focus</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#fromJSON">fromJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#getGlCanvas">getGlCanvas</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#getSelection">getSelection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#homeCamera">homeCamera</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setClearColor">setClearColor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setEdgesMode">setEdgesMode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setHelpersVisible">setHelpersVisible</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setLights">setLights</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setModel">setModel</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setSelection">setSelection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setSelectionMaterial">setSelectionMaterial</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setSize">setSize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#setView">setView</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxRenderer.html#toJSON">toJSON</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="FluxViewport.html">FluxViewport</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#.getChangeEvent">getChangeEvent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#.getEdgesModes">getEdgesModes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#.getEvents">getEvents</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#.getSelectionModes">getSelectionModes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#.getViews">getViews</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#.isKnownGeom">isKnownGeom</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#_setupDefaultLighting">_setupDefaultLighting</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#activateClipping">activateClipping</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#activateShadows">activateShadows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#addControls">addControls</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#deactivateClipping">deactivateClipping</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#deactivateShadows">deactivateShadows</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#downloadState">downloadState</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#focus">focus</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#fromJSON">fromJSON</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#getAutoFocus">getAutoFocus</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#getGlCanvas">getGlCanvas</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#getJson">getJson</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#getObjectMap">getObjectMap</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#getSelection">getSelection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#homeCamera">homeCamera</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#render">render</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setAutoFocus">setAutoFocus</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setClearColor">setClearColor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setEdgesMode">setEdgesMode</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setFogDensity">setFogDensity</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setGeometryEntity">setGeometryEntity</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setGeometryJson">setGeometryJson</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setHelpersVisible">setHelpersVisible</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setSelection">setSelection</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setSelectionMaterial">setSelectionMaterial</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setSize">setSize</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setTessUrl">setTessUrl</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setupDefaultLighting">setupDefaultLighting</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#setView">setView</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="FluxViewport.html#toJSON">toJSON</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#_deleteFromScene">_deleteFromScene</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#_removeGeometries">_removeGeometries</a></span></li>
 </nav>
 
 <div id="main">
@@ -47,7 +48,9 @@ import FluxHelpers from './helpers/FluxHelpers.js';
 import FluxRenderContext from './FluxRenderContext.js';
 import CameraControls from './controls/CameraControls.js';
 import SelectionControls from './controls/SelectionControls.js';
-import * as constants from './controls/constants.js';
+import * as controlsConstants from './controls/constants.js';
+import * as constants from './constants.js';
+import * as math from './utils/math.js';
 
 /**
  * Class wrapping the three.js renderer with more build in functionality.
@@ -77,9 +80,13 @@ export default function FluxRenderer(domParent, width, height, selection) {
     this._width = width;
     this._height = height;
 
+    this._shadowMapEnabled = false;
+    this._clippingEnabled = false;
+    this._clippingPlane = new THREE.Plane( new THREE.Vector3( 0, 0, 1 ), 0 );
+
     this._createCacheCanvas(width, height);
 
-    this.setClearColor(0xC5CDCC);
+    this.setClearColor(0xFFFFFF);
 
     this._cameras = new FluxCameras(width, height);
     this._helpers = new FluxHelpers();
@@ -93,7 +100,7 @@ export default function FluxRenderer(domParent, width, height, selection) {
     // Camera to be rendered with.Any instance of `THREE.Camera` can be set here.
     var _this = this;
     this._editorControls = this.addControls(CameraControls);
-    this._editorControls.addEventListener(constants.Events.CHANGE, function(event) {
+    this._editorControls.addEventListener(controlsConstants.Events.CHANGE, function(event) {
         _this._cameras.updateCamera(_this._width, _this._height);
         _this.dispatchEvent(event);
     });
@@ -157,7 +164,7 @@ function _deleteFromScene(scene, model) {
 FluxRenderer.prototype.addControls = function(CustomControls) {
     var customControls = new CustomControls(this._cameras.getCamera(), this._scene, this._domParent, this._width, this._height);
     var _this = this;
-    customControls.addEventListener(constants.Events.CHANGE, function (event) {
+    customControls.addEventListener(controlsConstants.Events.CHANGE, function (event) {
         _this.dispatchEvent(event);
     });
     this._controls.push(customControls);
@@ -332,10 +339,14 @@ FluxRenderer.prototype._addRenderTargets = function() {
 FluxRenderer.prototype.doRender = function () {
     this._setHost();
     this._update();
+    var clip = this._context.renderer.clippingPlanes;
     this._context.renderer.clear();
     this._context.renderer.render(this._scene, this._cameras.getCamera());
+    // Clipping does not affect helpers
+    this._context.renderer.clippingPlanes = [];
     this._context.renderer.render(this._edgesScene, this._cameras.getCamera());
     this._context.renderer.render(this._helpersScene, this._cameras.getCamera());
+    this._context.renderer.clippingPlanes = clip;
 };
 
 /**
@@ -380,6 +391,9 @@ FluxRenderer.prototype._setHost = function() {
     }
     this._context.currentHost = this;
     this.setSize(this._width, this._height);
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    this._updateClipping();
+
     // Move the THREE.WebGLRenderer's canvas under the new host
     this._domParent.appendChild(this._context.renderer.domElement);
 };
@@ -413,6 +427,114 @@ FluxRenderer.prototype.setSize = function(width, height) {
 
     this._cacheCanvas.height = height;
     this._cacheCanvas.width = width;
+};
+
+var dir = new THREE.Vector3();
+var l = new THREE.Vector3();
+var perp = new THREE.Vector3();
+var par = new THREE.Vector3();
+
+/**
+ * Enable shadows on the renderer, lights and objects.
+ * This causes objects to cast shadow on their environment.
+ */
+FluxRenderer.prototype.activateShadows = function() {
+    this._shadowMapEnabled = true;
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    var sphere = math.getBoundingSphere(this._scene);
+
+    this._scene.traverse(function (child) {
+        if (child.type === 'Mesh') {
+            child.castShadow = true;
+            child.receiveShadow = true;
+        }
+        if (child.type === 'DirectionalLight') {
+            var light = child;
+            light.castShadow = true;
+            dir.copy(sphere.center).sub(light.position);
+            var d = dir.length();
+            light.shadow.camera.near = -(d+sphere.radius);
+            light.shadow.camera.far = d+sphere.radius;
+            // Get the distance from the camera's axis to the center of the scene and use that
+            // to set the dimensions of the shadow camera's clipping box
+            l.set(0,0,0).sub(light.position).normalize();
+            par.copy(dir).projectOnVector(l);
+            perp.copy(dir).sub(par);
+            var radius = sphere.radius + perp.length();
+
+            light.shadow.camera.left = -radius;
+            light.shadow.camera.right = radius;
+            light.shadow.camera.top = radius;
+            light.shadow.camera.bottom = -radius;
+
+            light.shadow.bias = constants.SHADOW_DEFAULTS.BIAS;
+            light.shadow.mapSize.width = constants.SHADOW_DEFAULTS.MAP_WIDTH;
+            light.shadow.mapSize.height = constants.SHADOW_DEFAULTS.MAP_HEIGHT;
+        }
+    });
+};
+
+/**
+ * Enable shadows on the renderer, lights and objects.
+ * This causes objects to cast shadow on their environment.
+ */
+FluxRenderer.prototype.deactivateShadows = function() {
+    this._shadowMapEnabled = false;
+    this._context.renderer.shadowMap.enabled = this._shadowMapEnabled;
+    this._scene.traverse(function (child) {
+        if (child.type === 'Mesh') {
+            child.castShadow = false;
+            child.receiveShadow = false;
+        }
+        if (child.type === 'DirectionalLight') {
+            var light = child;
+            light.castShadow = false;
+        }
+    });
+};
+
+/**
+ * Enable renderer clipping to reveal inside of geometry
+ * @param {THREE.Vector3} n The clipping plane normal
+ * @param {Number} dist Distance from origin to clipping plane along normal
+ */
+FluxRenderer.prototype.activateClipping = function(n, dist) {
+    this._clippingEnabled = true;
+    this._clippingPlane.constant = dist;
+    this._clippingPlane.normal.copy(n);
+    this._updateClipping();
+};
+
+/**
+ * Turn of clipping so that all geometry will be rendered
+ */
+FluxRenderer.prototype.deactivateClipping = function() {
+    this._clippingEnabled = false;
+    this._updateClipping();
+};
+
+
+/**
+ * Update scene data for current clipping state after something changes.
+ */
+FluxRenderer.prototype._updateClipping = function() {
+    if (this._clippingEnabled) {
+        this._context.renderer.clippingPlanes = [this._clippingPlane];
+        this._scene.traverse(function (elem) {
+            if (elem.material) {
+                elem.parent.userData.materialSide = elem.material.side;
+                elem.material.side = THREE.DoubleSide;
+            }
+        });
+    } else {
+        this._context.renderer.clippingPlanes = [];
+        this._scene.traverse(function (elem) {
+            if (elem.material &amp;&amp; elem.parent.userData.materialSide != null) {
+                elem.material.side = elem.parent.userData.materialSide;
+            }
+        });
+    }
 };
 
 /**
@@ -455,7 +577,7 @@ FluxRenderer.prototype.fromJSON = function(state) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jan 05 2017 16:26:56 GMT-0800 (PST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Fri Jul 14 2017 11:40:07 GMT-0600 (MDT) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
